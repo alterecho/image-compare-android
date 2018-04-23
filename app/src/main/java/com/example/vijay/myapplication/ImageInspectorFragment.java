@@ -22,7 +22,7 @@ import java.util.Random;
 
 import static android.app.Activity.RESULT_OK;
 
-public class ImageInspectorView extends Fragment {
+public class ImageInspectorFragment extends Fragment {
 
     @Nullable
     @Override
@@ -60,30 +60,30 @@ public class ImageInspectorView extends Fragment {
 
 
     void addButtonAction() {
-        Log.d("ImageInspectorView", "addButtonAction");
+        Log.d("ImageInspectorFragment", "addButtonAction");
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
 
-        startActivityForResult(intent, GALLERY_IMAGE_REQUEST_CODE);
+//        startActivityForResult(intent, REQUEST_CODE_GALLERY_IMAGE);
 //
-//        initializeImageView();
-//
-//        int width = getView().getWidth();
-//        int height = getView().getHeight();
-//
-//        _imageView.getLayoutParams().width = 100;
-//        _imageView.getLayoutParams().height = 100;
-//        _imageView.setX((int)(width * 0.5));
-//        _imageView.setY((int)(height * 0.5));
+        initializeImageView();
+
+        int width = getView().getWidth();
+        int height = getView().getHeight();
+
+        _imageView.getLayoutParams().width = 100;
+        _imageView.getLayoutParams().height = 100;
+        _imageView.setX((int)(width * 0.5));
+        _imageView.setY((int)(height * 0.5));
     }
 
     void cameraButtonAction() {
-        Log.d("ImageInspectorView", "cameraButtonAction");
+        Log.d("ImageInspectorFragment", "cameraButtonAction");
     }
 
     void detailsButtonAction() {
-        Log.d("ImageInspectorView", "detailsButtonAction");
+        Log.d("ImageInspectorFragment", "detailsButtonAction");
     }
 
 
@@ -96,7 +96,7 @@ public class ImageInspectorView extends Fragment {
         }
 
         switch (requestCode) {
-            case GALLERY_IMAGE_REQUEST_CODE:
+            case REQUEST_CODE_GALLERY_IMAGE:
                 if (data != null) {
                     Uri imageURI = data.getData();
                     try {
@@ -135,7 +135,7 @@ public class ImageInspectorView extends Fragment {
         }
     }
 
-    private final int GALLERY_IMAGE_REQUEST_CODE = 1;
+    private final int REQUEST_CODE_GALLERY_IMAGE = 1;
 
     private ImageView _imageView = null;
 }
