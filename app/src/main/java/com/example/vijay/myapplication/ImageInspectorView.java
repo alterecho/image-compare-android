@@ -1,4 +1,5 @@
 package com.example.vijay.myapplication;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import java.io.IOException;
 import java.util.Random;
@@ -63,7 +65,17 @@ public class ImageInspectorView extends Fragment {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
 
-        startActivityForResult(intent, GALLERY_IMAGE_REQUEST_CODE);
+//        startActivityForResult(intent, GALLERY_IMAGE_REQUEST_CODE);
+
+        initializeImageView();
+
+        int width = getView().getWidth();
+        int height = getView().getHeight();
+
+        _imageView.getLayoutParams().width = 100;
+        _imageView.getLayoutParams().height = 100;
+        _imageView.setX((int)(width * 0.5));
+        _imageView.setY((int)(height * 0.5));
     }
 
     void cameraButtonAction() {
@@ -89,11 +101,16 @@ public class ImageInspectorView extends Fragment {
                     Uri imageURI = data.getData();
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageURI);
-                        if (_imageView == null) {
-                            _imageView = new ImageView(getContext());
-                            
-                            _imageView.setLayoutParams(layoutParams);
-                        }
+
+                        initializeImageView();
+
+                        int imageWidth = bitmap.getWidth();
+                        int imageHeight = bitmap.getHeight();
+
+                        _imageView.getLayoutParams().width = 100;
+                        _imageView.getLayoutParams().height = 100;
+
+                        _imageView.setBackgroundColor(Color.RED);
 
                     } catch (IOException e) {
                         Log.e(null, "unable to create bitmap");
@@ -105,6 +122,17 @@ public class ImageInspectorView extends Fragment {
                 break;
         }
 
+    }
+
+    /** initializes _imageView, and adds and centers it in the imageInspectorView (RelativeLayout) */
+    private final void initializeImageView() {
+        if (_imageView == null) {
+            _imageView = new ImageView(getContext());
+            _imageView.setBackgroundColor(Color.RED);
+
+            RelativeLayout layout = this.getView().findViewById(R.id.imageInspectorView);
+            layout.addView(_imageView);
+        }
     }
 
     /** */
