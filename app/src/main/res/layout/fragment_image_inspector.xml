@@ -51,13 +51,13 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <com.example.vijay.myapplication.ImageInspectorView
         android:id="@+id/imageInspectorView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="#afc">
 
-    </RelativeLayout>
+    </com.example.vijay.myapplication.ImageInspectorView>
 
 </LinearLayout>
