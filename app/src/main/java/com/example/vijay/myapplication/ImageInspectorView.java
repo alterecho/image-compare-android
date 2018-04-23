@@ -65,17 +65,17 @@ public class ImageInspectorView extends Fragment {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
 
-//        startActivityForResult(intent, GALLERY_IMAGE_REQUEST_CODE);
-
-        initializeImageView();
-
-        int width = getView().getWidth();
-        int height = getView().getHeight();
-
-        _imageView.getLayoutParams().width = 100;
-        _imageView.getLayoutParams().height = 100;
-        _imageView.setX((int)(width * 0.5));
-        _imageView.setY((int)(height * 0.5));
+        startActivityForResult(intent, GALLERY_IMAGE_REQUEST_CODE);
+//
+//        initializeImageView();
+//
+//        int width = getView().getWidth();
+//        int height = getView().getHeight();
+//
+//        _imageView.getLayoutParams().width = 100;
+//        _imageView.getLayoutParams().height = 100;
+//        _imageView.setX((int)(width * 0.5));
+//        _imageView.setY((int)(height * 0.5));
     }
 
     void cameraButtonAction() {
@@ -107,10 +107,10 @@ public class ImageInspectorView extends Fragment {
                         int imageWidth = bitmap.getWidth();
                         int imageHeight = bitmap.getHeight();
 
-                        _imageView.getLayoutParams().width = 100;
-                        _imageView.getLayoutParams().height = 100;
+                        _imageView.getLayoutParams().width = imageWidth;
+                        _imageView.getLayoutParams().height = imageHeight;
+                        _imageView.setImageBitmap(bitmap);
 
-                        _imageView.setBackgroundColor(Color.RED);
 
                     } catch (IOException e) {
                         Log.e(null, "unable to create bitmap");
@@ -135,7 +135,6 @@ public class ImageInspectorView extends Fragment {
         }
     }
 
-    /** */
     private final int GALLERY_IMAGE_REQUEST_CODE = 1;
 
     private ImageView _imageView = null;
