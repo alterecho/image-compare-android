@@ -22,6 +22,7 @@ import java.util.Random;
 
 import static android.app.Activity.RESULT_OK;
 
+/** Fragment containing the ImageInspectorToolbar and the ImageInspectorView */
 public class ImageInspectorFragment extends Fragment {
 
     @Nullable
