@@ -29,8 +29,6 @@ public class ImageInspectorFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_image_inspector, container, false);
-        Random rnd = new Random();
-        view.setBackgroundColor(Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255)));
 
         ImageButton addButton = (ImageButton)view.findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -56,6 +54,8 @@ public class ImageInspectorFragment extends Fragment {
             }
         });
 
+        _imageInspectorView = (ImageInspectorView)view.findViewById(R.id.imageInspectorView);
+
         return view;
     }
 
@@ -67,16 +67,7 @@ public class ImageInspectorFragment extends Fragment {
         intent.setType("image/*");
 
 //        startActivityForResult(intent, REQUEST_CODE_GALLERY_IMAGE);
-//
-        initializeImageView();
-
-        int width = getView().getWidth();
-        int height = getView().getHeight();
-
-        _imageView.getLayoutParams().width = 100;
-        _imageView.getLayoutParams().height = 100;
-        _imageView.setX((int)(width * 0.5));
-        _imageView.setY((int)(height * 0.5));
+        _imageInspectorView.setBitmap(null);
     }
 
     void cameraButtonAction() {
@@ -103,14 +94,8 @@ public class ImageInspectorFragment extends Fragment {
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageURI);
 
-                        initializeImageView();
-
-                        int imageWidth = bitmap.getWidth();
-                        int imageHeight = bitmap.getHeight();
-
-                        _imageView.getLayoutParams().width = imageWidth;
-                        _imageView.getLayoutParams().height = imageHeight;
-                        _imageView.setImageBitmap(bitmap);
+                        ImageInspectorView imageInspectorView = (ImageInspectorView)getView().findViewById(R.id.imageInspectorView);
+                        imageInspectorView.setBitmap(bitmap);
 
 
                     } catch (IOException e) {
@@ -125,18 +110,12 @@ public class ImageInspectorFragment extends Fragment {
 
     }
 
-    /** initializes _imageView, and adds and centers it in the imageInspectorView (RelativeLayout) */
-    private final void initializeImageView() {
-        if (_imageView == null) {
-            _imageView = new ImageView(getContext());
-            _imageView.setBackgroundColor(Color.RED);
 
-            RelativeLayout layout = this.getView().findViewById(R.id.imageInspectorView);
-            layout.addView(_imageView);
-        }
-    }
 
+    /** Request code to use to fetch image from gallery (Used in startActivityForResult) */
     private final int REQUEST_CODE_GALLERY_IMAGE = 1;
 
-    private ImageView _imageView = null;
+    /** The ImageInspectorView instance this fragment manages */
+    private ImageInspectorView _imageInspectorView = null;
+
 }
