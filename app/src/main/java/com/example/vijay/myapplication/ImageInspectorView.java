@@ -27,7 +27,7 @@ public class ImageInspectorView extends RelativeLayout {
 
 
     public void setBitmap(Bitmap bm) {
-//        _imageView.setImageBitmap(bm);
+        _imageView.setImageBitmap(bm);
 
         if (bm == null) {
 

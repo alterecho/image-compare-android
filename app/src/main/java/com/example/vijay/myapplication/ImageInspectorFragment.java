@@ -1,10 +1,13 @@
 package com.example.vijay.myapplication;
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,7 +20,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Random;
 
 import static android.app.Activity.RESULT_OK;
@@ -54,6 +59,7 @@ public class ImageInspectorFragment extends Fragment {
             }
         });
 
+        /** get the reference to the ImageInspectorView instance of this fragment */
         _imageInspectorView = (ImageInspectorView)view.findViewById(R.id.imageInspectorView);
 
         return view;
@@ -66,12 +72,36 @@ public class ImageInspectorFragment extends Fragment {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
 
-//        startActivityForResult(intent, REQUEST_CODE_GALLERY_IMAGE);
+//        startActivityForResult(intent, REQUEST_CODE_IMAGE_GALLERY);
         _imageInspectorView.setBitmap(null);
     }
 
     void cameraButtonAction() {
         Log.d("ImageInspectorFragment", "cameraButtonAction");
+
+        /// Support for API 15
+        if (this.getContext().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+
+        } else {
+
+        }
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        try {
+            _temporaryImageFile = File.createTempFile("temp", ".jpg", dir);
+        } catch (IOException exception) {
+            _temporaryImageFile = null;
+        }
+
+        if (_temporaryImageFile != null) {
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, _temporaryImageFile.toURI());
+//            startActivityForResult(intent, REQUEST_CODE_IMAGE_CAMERA);
+        }
+
+        startActivityForResult(intent, REQUEST_CODE_IMAGE_CAMERA);
+
+
     }
 
     void detailsButtonAction() {
@@ -88,21 +118,32 @@ public class ImageInspectorFragment extends Fragment {
         }
 
         switch (requestCode) {
-            case REQUEST_CODE_GALLERY_IMAGE:
+            case REQUEST_CODE_IMAGE_GALLERY:
                 if (data != null) {
                     Uri imageURI = data.getData();
                     try {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageURI);
-
-                        ImageInspectorView imageInspectorView = (ImageInspectorView)getView().findViewById(R.id.imageInspectorView);
-                        imageInspectorView.setBitmap(bitmap);
-
+                        Bitmap bm = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageURI);
+                        _imageInspectorView.setBitmap(bm);
 
                     } catch (IOException e) {
                         Log.e(null, "unable to create bitmap");
                     }
 
                 }
+                break;
+            case REQUEST_CODE_IMAGE_CAMERA:
+                /** can do by fetching Bitmap directly */
+//                Bitmap bm = (Bitmap) data.getExtras().get("data");
+//                try {
+//                    Bitmap bm = (Bitmap)MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.parse(_temporaryImageFile.toURI().toString()));
+//                } catch (IOException exception) {
+//
+//                }
+
+                Bitmap bm = (Bitmap) data.getExtras().get("data");
+                _imageInspectorView.setBitmap(bm);
+
+                break;
 
             default:
                 break;
@@ -112,10 +153,21 @@ public class ImageInspectorFragment extends Fragment {
 
 
 
+
+
+
+
+
     /** Request code to use to fetch image from gallery (Used in startActivityForResult) */
-    private final int REQUEST_CODE_GALLERY_IMAGE = 1;
+    private final int REQUEST_CODE_IMAGE_GALLERY = 1;
+
+    /** Request code to use to fetch image by camera capture */
+    private final int REQUEST_CODE_IMAGE_CAMERA = 2;
 
     /** The ImageInspectorView instance this fragment manages */
     private ImageInspectorView _imageInspectorView = null;
+
+    /** file used to store temporary images (from camera capture) */
+    private File _temporaryImageFile = null;
 
 }
