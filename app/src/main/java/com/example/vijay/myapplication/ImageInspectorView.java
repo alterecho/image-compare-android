@@ -18,7 +18,7 @@ import java.util.Random;
  * Manages an ImageView, and allows it to be zoomed and rotated.
  * The bitmap for the ImageView has to using setBitMap method.
  * */
-public class ImageInspectorView extends RelativeLayout {
+public class ImageInspectorView extends RelativeLayout implements View.OnTouchListener {
 
     public ImageInspectorView(Context context) {
         super(context);
@@ -92,6 +92,40 @@ public class ImageInspectorView extends RelativeLayout {
         return true;
     }
 
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        float x = event.getX();
+        float y = event.getY();
+
+        int width = this.getWidth();
+        int height = this.getHeight();
+
+        _imageView.setX(x);
+        _imageView.setY(y);;
+
+
+        switch (event.getAction()) {
+
+
+            case MotionEvent.ACTION_DOWN:
+                Log.d("ot", "ACTION_UP");
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                Log.d("ot", "ACTION_UP");
+
+                break;
+
+            case MotionEvent.ACTION_UP:
+                Log.d("ot", "ACTION_UP");
+                break;
+
+            default:
+                break;
+        }
+        return false;
+    }
 
     private void init() {
         if (_imageView == null) {
@@ -130,6 +164,8 @@ public class ImageInspectorView extends RelativeLayout {
                 }
             });
         };
+
+        this.setOnTouchListener(this);
 
         Random rnd = new Random();
         setBackgroundColor(Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255)));
