@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -69,6 +70,7 @@ public class ImageInspectorView extends RelativeLayout {
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
         _gestureDetector.onTouchEvent(event);
+        _scaleGestureDetector.onTouchEvent(event);
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -108,6 +110,27 @@ public class ImageInspectorView extends RelativeLayout {
             });
         }
 
+        if (_scaleGestureDetector == null) {
+            _scaleGestureDetector = new ScaleGestureDetector(getContext(), new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+
+                @Override
+                public boolean onScaleBegin(ScaleGestureDetector detector) {
+                    return super.onScaleBegin(detector);
+                }
+
+                @Override
+                public boolean onScale(ScaleGestureDetector detector) {
+                    Log.d(null, "scale");
+                    return super.onScale(detector);
+                }
+
+                @Override
+                public void onScaleEnd(ScaleGestureDetector detector) {
+                    super.onScaleEnd(detector);
+                }
+            });
+        };
+
         Random rnd = new Random();
         setBackgroundColor(Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255)));
     }
@@ -115,10 +138,13 @@ public class ImageInspectorView extends RelativeLayout {
 
 
     /** ImageView used to display the selected image */
+
     private ImageView       _imageView;
 
-    /** Tap gesture detector */
-    private GestureDetector     _gestureDetector;
+    /** for detecting double taps */
+    private GestureDetector         _gestureDetector;
 
+    /** for detecting pinch gesture */
+    private ScaleGestureDetector    _scaleGestureDetector;
 
 }
