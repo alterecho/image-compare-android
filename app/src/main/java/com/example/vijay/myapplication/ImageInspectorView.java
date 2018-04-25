@@ -12,6 +12,10 @@ import android.widget.RelativeLayout;
 
 import java.util.Random;
 
+/** A view managed by each ImagenspectorFragment.
+ * Manages an ImageView, and allows it to be zoomed and rotated.
+ * The bitmap for the ImageView has to using setBitMap method.
+ * */
 public class ImageInspectorView extends RelativeLayout {
 
     public ImageInspectorView(Context context) {
@@ -26,6 +30,7 @@ public class ImageInspectorView extends RelativeLayout {
 
 
 
+    /** sets the image of the ImageView this view manages */
     public void setBitmap(Bitmap bm) {
         _imageView.setImageBitmap(bm);
 
