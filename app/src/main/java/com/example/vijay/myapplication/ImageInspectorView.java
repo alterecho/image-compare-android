@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -55,9 +56,8 @@ public class ImageInspectorView extends RelativeLayout {
         _imageView.requestLayout();
 
         centerImage();
-
-
     }
+
 
     public void centerImage() {
         _imageView.setX(this.getWidth() * 0.5f - _imageView.getWidth() * 0.5f);
@@ -68,6 +68,7 @@ public class ImageInspectorView extends RelativeLayout {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
+        _gestureDetector.onTouchEvent(event);
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -90,7 +91,6 @@ public class ImageInspectorView extends RelativeLayout {
     }
 
 
-
     private void init() {
         if (_imageView == null) {
             _imageView = new ImageView(getContext());
@@ -98,12 +98,27 @@ public class ImageInspectorView extends RelativeLayout {
             this.addView(_imageView);
         }
 
+        if (_gestureDetector == null) {
+            _gestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    Log.d(null, "double tap");
+                    return super.onDoubleTap(e);
+                }
+            });
+        }
+
         Random rnd = new Random();
         setBackgroundColor(Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255)));
     }
 
+
+
     /** ImageView used to display the selected image */
     private ImageView       _imageView;
+
+    /** Tap gesture detector */
+    private GestureDetector     _gestureDetector;
 
 
 }
