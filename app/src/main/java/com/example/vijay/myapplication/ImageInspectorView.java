@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.Size;
+import android.util.SizeF;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -70,8 +72,9 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
-        _gestureDetector.onTouchEvent(event);
-        _scaleGestureDetector.onTouchEvent(event);
+        if (_scaleGestureDetector.onTouchEvent(event) || _gestureDetector.onTouchEvent(event)) {
+            return true;
+        }
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -131,7 +134,7 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
 
 
             case MotionEvent.ACTION_DOWN:
-                Log.d("ot", "ACTION_UP");
+                Log.d("ot", "ACTION_DOWN");
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -173,12 +176,27 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
 
                 @Override
                 public boolean onScaleBegin(ScaleGestureDetector detector) {
+
+                    if (_imageView != null) {
+                        float scaleFactor = detector.getScaleFactor();
+                        _startSize = new SizeF(_imageView.getWidth(), _imageView.getHeight());
+                    }
+
                     return super.onScaleBegin(detector);
                 }
 
                 @Override
                 public boolean onScale(ScaleGestureDetector detector) {
                     Log.d(null, "scale");
+
+                    if (_imageView != null) {
+                        float scaleFactor = detector.getScaleFactor();
+                        ViewGroup.LayoutParams params = _imageView.getLayoutParams();
+                        params.width = (int)(_startSize.getWidth() * scaleFactor);
+                        params.height = (int)(_startSize.getHeight() * scaleFactor);
+                        _imageView.requestLayout();
+                    }
+
                     return super.onScale(detector);
                 }
 
@@ -186,6 +204,8 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
                 public void onScaleEnd(ScaleGestureDetector detector) {
                     super.onScaleEnd(detector);
                 }
+
+                private SizeF       _startSize;
             });
         };
 
