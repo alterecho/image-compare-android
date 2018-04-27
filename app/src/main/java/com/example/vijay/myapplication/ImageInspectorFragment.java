@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,13 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.util.Random;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -106,6 +101,7 @@ public class ImageInspectorFragment extends Fragment {
 
     void detailsButtonAction() {
         Log.d("ImageInspectorFragment", "detailsButtonAction");
+        this.showImageDetailsView();
     }
 
 
@@ -169,5 +165,41 @@ public class ImageInspectorFragment extends Fragment {
 
     /** file used to store temporary images (from camera capture) */
     private File _temporaryImageFile = null;
+
+    /** the view used to show image details */
+    private ImageDetailsView _imageDetailsView = null;
+
+
+    /** Adds the ImageDetailsView instance over the ImageInspectorView */
+    private void showImageDetailsView() {
+        Context ctx = getContext();
+        if (ctx == null) {
+            return;
+        }
+
+        if (_imageDetailsView == null) {
+            _imageDetailsView = new ImageDetailsView(ctx);
+        }
+
+        _imageInspectorView.removeView(_imageDetailsView);
+        _imageInspectorView.addView(_imageDetailsView);
+
+        ViewGroup.LayoutParams params = _imageDetailsView.getLayoutParams();
+        params.width = (int)(_imageInspectorView.getHeight() * 0.5f);
+        params.height = (int)(_imageInspectorView.getHeight() * 0.5f);
+
+        _imageDetailsView.setLayoutParams(params);
+        _imageDetailsView.requestLayout();
+
+        _imageDetailsView.post(new Runnable() {
+            @Override
+            public void run() {
+                Functions.centerView(_imageDetailsView, _imageInspectorView);
+            }
+        });
+
+//        Functions.centerView(_imageDetailsView, _imageInspectorView);
+
+    }
 
 }

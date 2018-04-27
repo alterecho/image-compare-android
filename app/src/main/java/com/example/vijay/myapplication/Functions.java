@@ -6,6 +6,8 @@ import android.util.SizeF;
 import android.view.View;
 
 public class Functions {
+
+    /** Centers the view in its parentView */
     static void centerView(@NonNull View view, @NonNull View parentView) {
         SizeF size = new SizeF(view.getWidth(), view.getHeight());
         SizeF size_parent = new SizeF(view.getWidth(), view.getHeight());

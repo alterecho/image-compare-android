@@ -68,7 +68,6 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
         _imageView.setY(this.getHeight() * 0.5f - _imageView.getHeight() * 0.5f);
     }
 
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         super.onTouchEvent(event);
@@ -127,9 +126,6 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
 //        }
 
 
-
-
-
         switch (event.getAction()) {
 
 
@@ -152,6 +148,21 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
         }
         return false;
     }
+
+
+
+
+
+
+    /** ImageView used to display the selected image */
+    private ImageView       _imageView;
+
+    /** for detecting double taps */
+    private GestureDetector         _gestureDetector;
+
+    /** for detecting pinch gesture */
+    private ScaleGestureDetector    _scaleGestureDetector;
+
 
     private void init() {
         if (_imageView == null) {
@@ -214,18 +225,6 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
         Random rnd = new Random();
         setBackgroundColor(Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255)));
     }
-
-
-
-
-    /** ImageView used to display the selected image */
-    private ImageView       _imageView;
-
-    /** for detecting double taps */
-    private GestureDetector         _gestureDetector;
-
-    /** for detecting pinch gesture */
-    private ScaleGestureDetector    _scaleGestureDetector;
 
 
     /** toggles the _imageView's size between original size of the Bitmap and size that fits within this view */
