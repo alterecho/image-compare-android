@@ -3,12 +3,14 @@ package com.example.vijay.myapplication;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -45,7 +47,6 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
 
             imageView.getLayoutParams().width = 100;
             imageView.getLayoutParams().height = 100;
-
 
         } else {
             int width = bm.getWidth();
@@ -108,20 +109,21 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
         float x = touch_x - width * 0.5f;
         float y = touch_y - height * 0.5f;
 
-        if (x + width > width_container) {
-            x = width_container - width;
-        } else if (x < 0.0f) {
-            x = 0.0f;
-        }
 
-        if (y + height > height_container) {
-            y = height_container - height;
-        } else if (y < 0.0f) {
-            y = 0.0f;
-        }
+        // restrict the _imageView within bounds
+//        if (x + width > width_container) {
+//            x = width_container - width;
+//        } else if (x < 0.0f) {
+//            x = 0.0f;
+//        }
+//
+//        if (y + height > height_container) {
+//            y = height_container - height;
+//        } else if (y < 0.0f) {
+//            y = 0.0f;
+//        }
 
-        _imageView.setX(x);
-        _imageView.setY(y);
+
 
 
 
@@ -134,7 +136,8 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
 
             case MotionEvent.ACTION_MOVE:
                 Log.d("ot", "ACTION_UP");
-
+                _imageView.setX(x);
+                _imageView.setY(y);
                 break;
 
             case MotionEvent.ACTION_UP:
@@ -159,6 +162,7 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
                 @Override
                 public boolean onDoubleTap(MotionEvent e) {
                     Log.d(null, "double tap");
+                    toggleImageZoom();
                     return super.onDoubleTap(e);
                 }
             });
@@ -193,6 +197,7 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
 
 
 
+
     /** ImageView used to display the selected image */
     private ImageView       _imageView;
 
@@ -201,5 +206,48 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
 
     /** for detecting pinch gesture */
     private ScaleGestureDetector    _scaleGestureDetector;
+
+
+    /** toggles the _imageView's size between original size of the Bitmap and size that fits within this view */
+    private void toggleImageZoom() {
+
+        if (_imageView == null) {
+            return;
+        }
+
+        float width_bitmap = 100.0f;
+        float height_bitmap = 100.0f;
+//        Bitmap bm = ((BitmapDrawable)_imageView.getDrawable()).getBitmap();
+//        if (bm == null) {
+//            return;
+//        }
+//
+//        float width_bitmap = bm.getWidth();
+//        float height_bitmap = bm.getHeight();
+
+        float width_container = this.getWidth();
+        float height_container = this.getHeight();
+
+        float width = _imageView.getWidth();
+        float height = _imageView.getHeight();
+
+        ViewGroup.LayoutParams params = _imageView.getLayoutParams();
+
+        if (width != width_bitmap || height != height_bitmap) {
+            width = width_bitmap;
+            height = height_bitmap;
+        } else {
+            width = (width / height) * height_container;
+            height = height_container;
+        }
+
+        params.width = (int)width;
+        params.height = (int)height;
+
+        _imageView.setX(width_container * 0.5f - width * 0.5f);
+        _imageView.setY(height_container * 0.5f - height * 0.5f);
+
+        _imageView.requestLayout();
+    }
 
 }
