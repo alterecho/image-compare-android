@@ -98,12 +98,14 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
         float x = event.getX();
         float y = event.getY();
 
-        int width = this.getWidth();
-        int height = this.getHeight();
+        int width_container = this.getWidth();
+        int height_container = this.getHeight();
 
-        _imageView.setX(x);
-        _imageView.setY(y);;
+        int width = _imageView.getWidth();
+        int height = _imageView.getHeight();
 
+        _imageView.setX(x - (int)(width * 0.5));
+        _imageView.setY(y - (int)(height * 0.5));
 
         switch (event.getAction()) {
 
@@ -174,7 +176,6 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
 
 
     /** ImageView used to display the selected image */
-
     private ImageView       _imageView;
 
     /** for detecting double taps */
