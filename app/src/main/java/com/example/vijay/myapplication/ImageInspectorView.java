@@ -95,8 +95,8 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
-        float x = event.getX();
-        float y = event.getY();
+        float touch_x = event.getX();
+        float touch_y = event.getY();
 
         int width_container = this.getWidth();
         int height_container = this.getHeight();
@@ -104,8 +104,26 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
         int width = _imageView.getWidth();
         int height = _imageView.getHeight();
 
-        _imageView.setX(x - (int)(width * 0.5));
-        _imageView.setY(y - (int)(height * 0.5));
+        /// the new values for the x and y of the _imageView
+        float x = touch_x - width * 0.5f;
+        float y = touch_y - height * 0.5f;
+
+        if (x + width > width_container) {
+            x = width_container - width;
+        } else if (x < 0.0f) {
+            x = 0.0f;
+        }
+
+        if (y + height > height_container) {
+            y = height_container - height;
+        } else if (y < 0.0f) {
+            y = 0.0f;
+        }
+
+        _imageView.setX(x);
+        _imageView.setY(y);
+
+
 
         switch (event.getAction()) {
 
