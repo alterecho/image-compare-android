@@ -179,14 +179,17 @@ public class ImageInspectorFragment extends Fragment {
 
         if (_imageDetailsView == null) {
             _imageDetailsView = new ImageDetailsView(ctx);
+        } else if (_imageDetailsView.getParent() != null) {
+            this.hideImageDetailsView();
+            return;
         }
 
         _imageInspectorView.removeView(_imageDetailsView);
         _imageInspectorView.addView(_imageDetailsView);
 
         ViewGroup.LayoutParams params = _imageDetailsView.getLayoutParams();
-        params.width = (int)(_imageInspectorView.getHeight() * 0.5f);
-        params.height = (int)(_imageInspectorView.getHeight() * 0.5f);
+        params.width = (int)(_imageInspectorView.getWidth() * 0.75f);
+        params.height = (int)(_imageInspectorView.getHeight() * 0.75f);
 
         _imageDetailsView.setLayoutParams(params);
         _imageDetailsView.requestLayout();
@@ -194,12 +197,22 @@ public class ImageInspectorFragment extends Fragment {
         _imageDetailsView.post(new Runnable() {
             @Override
             public void run() {
-                Functions.centerView(_imageDetailsView, _imageInspectorView);
+                Functions.centerView(_imageDetailsView);
             }
         });
 
 //        Functions.centerView(_imageDetailsView, _imageInspectorView);
 
+    }
+
+    private void hideImageDetailsView() {
+        if (_imageDetailsView == null) {
+            return;
+        }
+
+        View v;
+
+        _imageInspectorView.removeView(_imageDetailsView);
     }
 
 }

@@ -12,7 +12,7 @@ public class Functions {
     /** Centers the view in its parentView */
     static void centerView(@NonNull View view, @NonNull View parentView) {
         SizeF size = new SizeF(view.getWidth(), view.getHeight());
-        SizeF size_parent = new SizeF(view.getWidth(), view.getHeight());
+        SizeF size_parent = new SizeF(parentView.getWidth(), parentView.getHeight());
 
         PointF center_parent = new PointF(size_parent.getWidth() * 0.5f, size_parent.getHeight() * 0.5f);
 
