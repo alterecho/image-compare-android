@@ -70,10 +70,10 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        super.onTouchEvent(event);
-        if (_scaleGestureDetector.onTouchEvent(event) || _gestureDetector.onTouchEvent(event)) {
-            return true;
-        }
+
+//        if (_scaleGestureDetector.onTouchEvent(event) || _gestureDetector.onTouchEvent(event)) {
+//            return true;
+//        }
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -92,7 +92,7 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
                 break;
         }
 
-        return true;
+        return super.onTouchEvent(event);
     }
 
     @Override

@@ -101,7 +101,18 @@ public class ImageInspectorFragment extends Fragment {
 
     void detailsButtonAction() {
         Log.d("ImageInspectorFragment", "detailsButtonAction");
-        this.showImageDetailsView();
+//        this.showImageDetailsView();
+
+        if (_overlay == null) {
+
+            Context ctx = getContext();
+            if (ctx == null) {
+                return;
+            }
+            _overlay = new Overlay(ctx);
+        }
+
+        _overlay.show(_imageDetailsView, _imageInspectorView);
     }
 
 
@@ -155,19 +166,23 @@ public class ImageInspectorFragment extends Fragment {
 
 
     /** Request code to use to fetch image from gallery (Used in startActivityForResult) */
-    private final int REQUEST_CODE_IMAGE_GALLERY = 1;
+    private final int       REQUEST_CODE_IMAGE_GALLERY = 1;
 
     /** Request code to use to fetch image by camera capture */
-    private final int REQUEST_CODE_IMAGE_CAMERA = 2;
+    private final int       REQUEST_CODE_IMAGE_CAMERA = 2;
 
     /** The ImageInspectorView instance this fragment manages */
-    private ImageInspectorView _imageInspectorView = null;
+    private ImageInspectorView      _imageInspectorView = null;
 
     /** file used to store temporary images (from camera capture) */
-    private File _temporaryImageFile = null;
+    private File                    _temporaryImageFile = null;
 
     /** the view used to show image details */
-    private ImageDetailsView _imageDetailsView = null;
+    private ImageDetailsView        _imageDetailsView = null;
+
+    /** to show the Image details as overlay */
+    private Overlay                 _overlay;
+
 
 
     /** Adds the ImageDetailsView instance over the ImageInspectorView */
@@ -205,12 +220,11 @@ public class ImageInspectorFragment extends Fragment {
 
     }
 
+    /** hides the ImageDetails View */
     private void hideImageDetailsView() {
         if (_imageDetailsView == null) {
             return;
         }
-
-        View v;
 
         _imageInspectorView.removeView(_imageDetailsView);
     }

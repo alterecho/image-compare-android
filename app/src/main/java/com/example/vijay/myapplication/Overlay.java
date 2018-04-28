@@ -3,6 +3,7 @@ package com.example.vijay.myapplication;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -20,19 +21,53 @@ public class Overlay extends View {
 
     public void show(View view, ViewGroup viewGroup) {
         ViewParent viewParent = this.getParent();
+
         if (viewParent != null) {
-            if (viewParent instanceof ViewGroup) {
-                ((ViewGroup) viewParent).removeView(this);
-            }
+            this.hide();
+            return;
         }
 
+        viewGroup.addView(this);
         this.getLayoutParams().width = viewGroup.getWidth();
         this.getLayoutParams().height = viewGroup.getHeight();
-        viewGroup.addView(this);
+
+    }
+
+    public void hide() {
+        if (this.getParent() != null && this.getParent() instanceof ViewGroup) {
+            ((ViewGroup) this.getParent()).removeView(this);
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        switch(event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                _touch_down = true;
+                return true;
+//                break;
+
+            case MotionEvent.ACTION_UP:
+                if (_touch_down) {
+                    this.hide();
+                }
+
+                _touch_down = false;
+                break;
+
+                default:
+                    break;
+        }
+
+        return super.onTouchEvent(event);
     }
 
 
 
+
+    /** indicates if touch down event happened on this view */
+    private boolean         _touch_down = false;
 
     private void init() {
         this.setBackgroundColor(Color.argb(127, 0, 0, 0));
