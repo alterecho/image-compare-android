@@ -30,4 +30,20 @@ public class Functions {
         ViewGroup layout = (ViewGroup) viewParent;
         centerView(view, layout);
     }
+
+    /**
+     * Convenience method to remove a View from it's parent
+     * @param view the View to remove from its parent
+     */
+    static void removeFromParent(View view) {
+        ViewParent viewParent = view.getParent();
+        if (viewParent == null) {
+            return;
+        }
+
+        if (viewParent instanceof ViewGroup) {
+            ViewGroup viewGroup = (ViewGroup)viewParent;
+            viewGroup.removeView(view);
+        }
+    }
 }

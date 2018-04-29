@@ -103,15 +103,19 @@ public class ImageInspectorFragment extends Fragment {
         Log.d("ImageInspectorFragment", "detailsButtonAction");
 //        this.showImageDetailsView();
 
+        Context ctx = getContext();
         if (_overlay == null) {
 
-            Context ctx = getContext();
+
             if (ctx == null) {
                 return;
             }
             _overlay = new Overlay(ctx);
         }
 
+        if (_imageDetailsView == null) {
+            _imageDetailsView = new ImageDetailsView(ctx);
+        }
         _overlay.show(_imageDetailsView, _imageInspectorView);
     }
 
