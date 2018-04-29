@@ -1,9 +1,11 @@
 package com.example.vijay.myapplication;
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,8 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.drew.metadata.exif.ExifReader;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -67,8 +72,8 @@ public class ImageInspectorFragment extends Fragment {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
 
-//        startActivityForResult(intent, REQUEST_CODE_IMAGE_GALLERY);
-        _imageInspectorView.setBitmap(null);
+        startActivityForResult(intent, REQUEST_CODE_IMAGE_GALLERY);
+//        _imageInspectorView.setBitmap(null);
     }
 
     void cameraButtonAction() {
@@ -95,8 +100,6 @@ public class ImageInspectorFragment extends Fragment {
         }
 
         startActivityForResult(intent, REQUEST_CODE_IMAGE_CAMERA);
-
-
     }
 
     void detailsButtonAction() {
@@ -133,6 +136,21 @@ public class ImageInspectorFragment extends Fragment {
                 if (data != null) {
                     Uri imageURI = data.getData();
                     try {
+                        InputStream iStream = getContext().getContentResolver().openInputStream(imageURI);
+
+                        File file = new File(imageURI.getPath());
+                        ExifInterface exifInterface = new ExifInterface(iStream);
+
+
+
+                        String aperture = exifInterface.getAttribute(ExifInterface.TAG_APERTURE_VALUE);
+                        String value = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+                        value = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF);
+                        value = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+                        value = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF);
+
+                        ExifReader exifReader = new ExifReader(iStream);
+
                         Bitmap bm = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageURI);
                         _imageInspectorView.setBitmap(bm);
 
