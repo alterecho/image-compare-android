@@ -19,11 +19,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifReader;
+import com.example.vijay.myapplication.Model.MetaData;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -149,14 +155,25 @@ public class ImageInspectorFragment extends Fragment {
                         value = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
                         value = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF);
 
-                        ExifReader exifReader = new ExifReader(iStream);
 
+//                        BufferedInputStream bis = new BufferedInputStream(iStream);
+//                        Metadata metadata = ImageMetadataReader.readMetadata(bis,iStream.available());
+//
+//                        Metadata md = ImageMetadataReader.readMetadata(file);
+
+                        List<MetaData> metaDataArray = MetaData.metaDataArrayFrom(exifInterface);
                         Bitmap bm = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageURI);
+
                         _imageInspectorView.setBitmap(bm);
+
+
 
                     } catch (IOException e) {
                         Log.e(null, "unable to create bitmap");
                     }
+//                    catch (ImageProcessingException e) {
+//                        Log.e(null, "unable to process information");
+//                    }
 
                 }
                 break;
