@@ -141,34 +141,16 @@ public class ImageInspectorFragment extends Fragment {
             case REQUEST_CODE_IMAGE_GALLERY:
                 if (data != null) {
                     Uri imageURI = data.getData();
+
                     try {
-                        InputStream iStream = getContext().getContentResolver().openInputStream(imageURI);
-
-                        File file = new File(imageURI.getPath());
-                        ExifInterface exifInterface = new ExifInterface(iStream);
-
-
-
-                        String aperture = exifInterface.getAttribute(ExifInterface.TAG_APERTURE_VALUE);
-                        String value = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
-                        value = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF);
-                        value = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
-                        value = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF);
-
-
-//                        BufferedInputStream bis = new BufferedInputStream(iStream);
-//                        Metadata metadata = ImageMetadataReader.readMetadata(bis,iStream.available());
-//
-//                        Metadata md = ImageMetadataReader.readMetadata(file);
-
-                        List<MetaData> metaDataArray = MetaData.metaDataArrayFrom(exifInterface);
+                        try {
+                            List<MetaData> metaDataArray = MetaData.metaDataArrayFrom(imageURI, getContext());
+                        } catch (MetaData.MetaDataException e){
+                            e.printStackTrace();
+                        }
                         Bitmap bm = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageURI);
-
                         _imageInspectorView.setBitmap(bm);
-
-
-
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         Log.e(null, "unable to create bitmap");
                     }
 //                    catch (ImageProcessingException e) {

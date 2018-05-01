@@ -1,8 +1,16 @@
 package com.example.vijay.myapplication.Model;
 
+import android.content.Context;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.util.Log;
 
+import com.drew.metadata.Metadata;
+import com.drew.metadata.MetadataException;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +19,12 @@ import java.util.List;
 import java.util.Map;
 
 public class MetaData {
+
+    public static class MetaDataException extends Exception {
+        public MetaDataException(String message) {
+            super(message);
+        }
+    }
 
     /** a list of available tags, with their display names (tag is key, and display name is the value) */
     static Map<String, String> tags;
@@ -28,10 +42,9 @@ public class MetaData {
             e.printStackTrace();
         }
 
-    };
+    }
 
     public static List<MetaData> metaDataArrayFrom(ExifInterface exifInterface) {
-
         ArrayList<MetaData> array = new ArrayList<MetaData>();
         Iterator iterator = tags.entrySet().iterator();
         while (iterator.hasNext()) {
@@ -42,10 +55,25 @@ public class MetaData {
 
             array.add(metaData);
         }
-
-
-
         return array;
+    }
+
+    public static List<MetaData> metaDataArrayFrom(Uri imageURI, Context ctx) throws MetaDataException {
+        try {
+            InputStream iStream = ctx.getContentResolver().openInputStream(imageURI);
+            File file = new File(imageURI.getPath());
+            ExifInterface exifInterface = new ExifInterface(iStream);
+            List<MetaData> list = MetaData.metaDataArrayFrom(exifInterface);
+            return list;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new MetaDataException("Ünable to retreive metadata for imageURI:" + imageURI);
+        }
+//                        BufferedInputStream bis = new BufferedInputStream(iStream);
+//                        Metadata metadata = ImageMetadataReader.readMetadata(bis,iStream.available());
+//
+//                        Metadata md = ImageMetadataReader.readMetadata(file);
     }
 
 
