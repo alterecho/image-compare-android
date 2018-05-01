@@ -197,13 +197,13 @@ public class ImageInspectorFragment extends Fragment {
     /** Request code to use to fetch image by camera capture */
     private final int       REQUEST_CODE_IMAGE_CAMERA = 2;
 
-    /** The ImageInspectorView instance this fragment manages */
+    /** The ImageInspectorView instance this fragment manages. CREATED IN LAYOUT*/
     private ImageInspectorView      _imageInspectorView = null;
 
     /** file used to store temporary images (from camera capture) */
     private File                    _temporaryImageFile = null;
 
-    /** the view used to show image details */
+    /** the view used to show image details. CREATED IN THIS FILE */
     private ImageDetailsView        _imageDetailsView = null;
 
     /** to show the Image details as overlay */

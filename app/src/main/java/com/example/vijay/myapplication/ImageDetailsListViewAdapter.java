@@ -10,24 +10,25 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.vijay.myapplication.Model.MetaData;
+import com.example.vijay.myapplication.View.ImageDetailsListViewRow;
 
 import org.w3c.dom.Text;
 
 public class ImageDetailsListViewAdapter extends ArrayAdapter<String> {
     public ImageDetailsListViewAdapter(Context ctx) {
-        super(ctx, R.layout.row_image_details_list_view);
+        super(ctx, 0);
     }
 
     @Override
     public int getCount() {
 
-//        return 5;
+        return 5;
 
-        if (_dataSet == null) {
-            return 0;
-        }
-        
-        return _dataSet.length;
+//        if (_dataSet == null) {
+//            return 0;
+//        }
+//
+//        return _dataSet.length;
     }
 
     public void setDataSet(MetaData[] _dataSet) {
@@ -39,16 +40,17 @@ public class ImageDetailsListViewAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
+
         if (convertView == null) {
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.row_image_details_list_view, parent, false);
+            convertView = new ImageDetailsListViewRow(getContext());
         }
 
-        TextView nameTextView = convertView.findViewById(R.id.name);
-        TextView valueTextView = (TextView)convertView.findViewById(R.id.value);
+        if (_dataSet != null) {
+            MetaData metaData = _dataSet[position];
+            ImageDetailsListViewRow row = (ImageDetailsListViewRow)convertView;
+            row.set(metaData);
+        }
 
-        nameTextView.setText("titl");
-        valueTextView.setText("val1");
 
         return convertView;
     }
