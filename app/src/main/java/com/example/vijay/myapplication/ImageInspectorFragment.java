@@ -143,13 +143,18 @@ public class ImageInspectorFragment extends Fragment {
                     Uri imageURI = data.getData();
 
                     try {
+                        //* retrieve and set the bitmap for the _imageIspectorView
+                        Bitmap bm = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageURI);
+                        _imageInspectorView.setBitmap(bm);
+
+                        //* set the MetaData array for the _imageDetailsView
                         try {
                             List<MetaData> metaDataArray = MetaData.metaDataArrayFrom(imageURI, getContext());
+                            _imageDetailsView.setData(metaDataArray.toArray(new MetaData[metaDataArray.size()]));
                         } catch (MetaData.MetaDataException e){
                             e.printStackTrace();
                         }
-                        Bitmap bm = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageURI);
-                        _imageInspectorView.setBitmap(bm);
+
                     } catch (Exception e) {
                         Log.e(null, "unable to create bitmap");
                     }

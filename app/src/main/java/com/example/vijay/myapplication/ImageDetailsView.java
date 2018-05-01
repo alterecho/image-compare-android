@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.example.vijay.myapplication.Model.MetaData;
+
 public class ImageDetailsView extends RelativeLayout {
 
     ImageDetailsView(Context ctx) {
@@ -21,6 +23,23 @@ public class ImageDetailsView extends RelativeLayout {
         init();
     }
 
+    public void setData(MetaData[] data) {
+        _adapter.setDataSet(data);
+    }
+
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        _adapter.notifyDataSetChanged();
+    }
+
+    /** used to display the list of available MetaData */
+    private ListView        _listView;
+
+    /** the adapter set for the _listView */
+    private ImageDetailsListViewAdapter     _adapter;
+
     private void init() {
         this.setBackgroundColor(Color.BLUE);
         LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -29,10 +48,15 @@ public class ImageDetailsView extends RelativeLayout {
         //inflate(getContext(), R.layout.view_image_details, this);
 
         _listView = (ListView)view.findViewById(R.id.listView);
-        _listView.setAdapter(new ImageDetailsListViewAdapter(getContext()));
+        _listView.post(new Runnable() {
+            @Override
+            public void run() {
+                ((ImageDetailsListViewAdapter)_listView.getAdapter()).notifyDataSetChanged();
+            }
+        });
+
+        _adapter = new ImageDetailsListViewAdapter(getContext());
+        _listView.setAdapter(_adapter);
     }
 
-
-
-    private ListView _listView;
 }

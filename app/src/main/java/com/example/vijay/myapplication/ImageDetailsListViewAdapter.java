@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.vijay.myapplication.Model.MetaData;
+
 import org.w3c.dom.Text;
 
 public class ImageDetailsListViewAdapter extends ArrayAdapter<String> {
@@ -18,7 +20,19 @@ public class ImageDetailsListViewAdapter extends ArrayAdapter<String> {
 
     @Override
     public int getCount() {
-        return 10;
+
+//        return 5;
+
+        if (_dataSet == null) {
+            return 0;
+        }
+        
+        return _dataSet.length;
+    }
+
+    public void setDataSet(MetaData[] _dataSet) {
+        this._dataSet = _dataSet;
+        this.notifyDataSetChanged();
     }
 
     @NonNull
@@ -38,4 +52,10 @@ public class ImageDetailsListViewAdapter extends ArrayAdapter<String> {
 
         return convertView;
     }
+
+
+
+
+    /** data set used by this adapter */
+    private MetaData[]      _dataSet = null;
 }
