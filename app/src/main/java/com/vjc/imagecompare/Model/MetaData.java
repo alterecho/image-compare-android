@@ -1,17 +1,12 @@
-package com.example.vijay.myapplication.Model;
+package com.vjc.imagecompare.Model;
 
 import android.content.Context;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.util.Log;
 
-import com.drew.metadata.Metadata;
-import com.drew.metadata.MetadataException;
-
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;

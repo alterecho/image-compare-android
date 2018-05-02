@@ -56,13 +56,13 @@
 
     </LinearLayout>
 
-    <com.example.vijay.myapplication.ImageInspectorView
+    <com.vjc.imagecompare.ImageInspectorView
         android:id="@+id/imageInspectorView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="#afc">
 
-    </com.example.vijay.myapplication.ImageInspectorView>
+    </com.vjc.imagecompare.ImageInspectorView>
 
 </LinearLayout>

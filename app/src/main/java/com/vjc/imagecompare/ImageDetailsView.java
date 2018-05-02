@@ -1,15 +1,14 @@
-package com.example.vijay.myapplication;
+package com.vjc.imagecompare;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.example.vijay.myapplication.Model.MetaData;
+import com.vjc.imagecompare.Model.MetaData;
 
 public class ImageDetailsView extends RelativeLayout {
 

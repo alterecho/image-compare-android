@@ -1,4 +1,4 @@
-package com.example.vijay.myapplication.View;
+package com.vjc.imagecompare.View;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,8 +6,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.vijay.myapplication.Model.MetaData;
-import com.example.vijay.myapplication.R;
+import com.vjc.imagecompare.Model.MetaData;
+import com.vjc.imagecompare.R;
 
 public class ImageDetailsListViewRow extends LinearLayout {
     public ImageDetailsListViewRow(Context ctx) {

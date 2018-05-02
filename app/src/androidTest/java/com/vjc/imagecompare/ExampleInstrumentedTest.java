@@ -1,4 +1,4 @@
-package com.example.vijay.myapplication;
+package com.vjc.imagecompare;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.vijay.myapplication", appContext.getPackageName());
+        assertEquals("com.vjc.imagecompare", appContext.getPackageName());
     }
 }

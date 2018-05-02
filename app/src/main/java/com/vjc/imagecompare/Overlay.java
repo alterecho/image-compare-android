@@ -1,4 +1,4 @@
-package com.example.vijay.myapplication;
+package com.vjc.imagecompare;
 
 import android.content.Context;
 import android.graphics.Color;

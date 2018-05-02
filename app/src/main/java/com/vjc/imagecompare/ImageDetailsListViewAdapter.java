@@ -1,18 +1,14 @@
-package com.example.vijay.myapplication;
+package com.vjc.imagecompare;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
-import com.example.vijay.myapplication.Model.MetaData;
-import com.example.vijay.myapplication.View.ImageDetailsListViewRow;
-
-import org.w3c.dom.Text;
+import com.vjc.imagecompare.Model.MetaData;
+import com.vjc.imagecompare.View.ImageDetailsListViewRow;
 
 public class ImageDetailsListViewAdapter extends ArrayAdapter<String> {
     public ImageDetailsListViewAdapter(Context ctx) {

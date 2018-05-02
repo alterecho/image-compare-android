@@ -1,4 +1,4 @@
-package com.example.vijay.myapplication;
+package com.vjc.imagecompare;
 
 import android.graphics.PointF;
 import android.support.annotation.NonNull;

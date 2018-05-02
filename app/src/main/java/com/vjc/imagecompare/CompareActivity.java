@@ -1,4 +1,4 @@
-package com.example.vijay.myapplication;
+package com.vjc.imagecompare;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
