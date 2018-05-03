@@ -3,6 +3,7 @@ package com.vjc.imagecompare;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -57,9 +58,15 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
             _imageView.getLayoutParams().width = width;
             _imageView.getLayoutParams().height = height;
         }
-        _imageView.requestLayout();
 
-        centerImage();
+
+        // * center the image after it is laid out
+        _imageView.post(new Runnable() {
+            @Override
+            public void run() {
+                centerImage();
+            }
+        });
     }
 
 
@@ -80,6 +87,7 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.d(null, "ACTION_DOWN");
+
                 return true;
 
             case MotionEvent.ACTION_MOVE:
@@ -110,8 +118,8 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
         int height = _imageView.getHeight();
 
         /// the new values for the x and y of the _imageView
-        float x = touch_x - width * 0.5f;
-        float y = touch_y - height * 0.5f;
+        float x = touch_x - _touch_delta.getWidth() - width * 0.5f;
+        float y = touch_y - _touch_delta.getHeight() - height * 0.5f;
 
 
         // restrict the _imageView within bounds
@@ -133,6 +141,10 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
 
             case MotionEvent.ACTION_DOWN:
                 Log.d("ot", "ACTION_DOWN");
+                _touch_delta = new SizeF(
+                        event.getX() - (_imageView.getX() + _imageView.getWidth() * 0.5f),
+                        event.getY() - (_imageView.getY() + _imageView.getHeight() * 0.5f)
+                );
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -164,6 +176,9 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
 
     /** for detecting pinch gesture */
     private ScaleGestureDetector    _scaleGestureDetector;
+
+    /** difference between where the touch point began, and the _imageView's center */
+    private SizeF          _touch_delta = new SizeF(0.0f, 0.0f);
 
 
     private void init() {
