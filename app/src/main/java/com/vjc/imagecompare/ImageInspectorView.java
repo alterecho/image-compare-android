@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -23,7 +24,7 @@ import java.util.Random;
  * Manages an ImageView, and allows it to be zoomed and rotated.
  * The bitmap for the ImageView has to using setBitMap method.
  * */
-public class ImageInspectorView extends RelativeLayout implements View.OnTouchListener {
+public class ImageInspectorView extends FrameLayout implements View.OnTouchListener {
 
     public ImageInspectorView(Context context) {
         super(context);
@@ -251,8 +252,9 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
             return;
         }
 
-        float width_bitmap = 100.0f;
-        float height_bitmap = 100.0f;
+        Bitmap bm = ((BitmapDrawable)_imageView.getDrawable()).getBitmap();
+        float width_bitmap = bm.getWidth();
+        float height_bitmap = bm.getHeight();
 //        Bitmap bm = ((BitmapDrawable)_imageView.getDrawable()).getBitmap();
 //        if (bm == null) {
 //            return;
@@ -261,13 +263,14 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
 //        float width_bitmap = bm.getWidth();
 //        float height_bitmap = bm.getHeight();
 
-        float width_container = this.getWidth();
-        float height_container = this.getHeight();
+        final float width_container = this.getWidth();
+        final float height_container = this.getHeight();
 
-        float width = _imageView.getWidth();
-        float height = _imageView.getHeight();
+
 
         ViewGroup.LayoutParams params = _imageView.getLayoutParams();
+        float width = params.width;
+        float height = params.height;
 
         if (width != width_bitmap || height != height_bitmap) {
             width = width_bitmap;
@@ -280,10 +283,19 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
         params.width = (int)width;
         params.height = (int)height;
 
-        _imageView.setX(width_container * 0.5f - width * 0.5f);
-        _imageView.setY(height_container * 0.5f - height * 0.5f);
-
+        _imageView.setLayoutParams(params);
         _imageView.requestLayout();
+
+        _imageView.post(new Runnable() {
+            @Override
+            public void run() {
+                _imageView.setX(width_container * 0.5f - _imageView.getLayoutParams().width * 0.5f);
+                _imageView.setY(height_container * 0.5f - _imageView.getLayoutParams().height * 0.5f);
+            }
+        });
+
+
+
     }
 
 }
