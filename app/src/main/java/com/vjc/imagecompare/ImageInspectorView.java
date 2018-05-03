@@ -225,7 +225,7 @@ public class ImageInspectorView extends RelativeLayout implements View.OnTouchLi
         this.setOnTouchListener(this);
 
         Random rnd = new Random();
-        setBackgroundColor(Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255)));
+//        setBackgroundColor(Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255)));
     }
 
 
