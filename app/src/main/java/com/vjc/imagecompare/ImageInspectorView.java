@@ -44,13 +44,8 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
 
         if (bm == null) {
 
-            ImageView imageView = new ImageView(this.getContext());
-            imageView = _imageView;
-            imageView.setBackgroundColor(Color.RED);
-//            this.addView(imageView);
-
-            imageView.getLayoutParams().width = 100;
-            imageView.getLayoutParams().height = 100;
+            _imageView.getLayoutParams().width = 100;
+            _imageView.getLayoutParams().height = 100;
 
         } else {
             int width = bm.getWidth();
@@ -185,7 +180,7 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
     private void init() {
         if (_imageView == null) {
             _imageView = new ImageView(getContext());
-            _imageView.setBackgroundColor(Color.RED);
+            _imageView.setBackgroundColor(Color.TRANSPARENT);
             this.addView(_imageView);
         }
 
@@ -248,7 +243,7 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
     /** toggles the _imageView's size between original size of the Bitmap and size that fits within this view */
     private void toggleImageZoom() {
 
-        if (_imageView == null) {
+        if (_imageView == null || _imageView.getDrawable() == null) {
             return;
         }
 
@@ -283,14 +278,13 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
         params.width = (int)width;
         params.height = (int)height;
 
-        _imageView.setLayoutParams(params);
         _imageView.requestLayout();
 
         _imageView.post(new Runnable() {
             @Override
             public void run() {
-                _imageView.setX(width_container * 0.5f - _imageView.getLayoutParams().width * 0.5f);
-                _imageView.setY(height_container * 0.5f - _imageView.getLayoutParams().height * 0.5f);
+                _imageView.setX(width_container * 0.5f - _imageView.getWidth() * 0.5f);
+                _imageView.setY(height_container * 0.5f - _imageView.getHeight() * 0.5f);
             }
         });
 
