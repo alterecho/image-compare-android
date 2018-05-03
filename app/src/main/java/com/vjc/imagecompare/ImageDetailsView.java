@@ -40,7 +40,7 @@ public class ImageDetailsView extends RelativeLayout {
     private ImageDetailsListViewAdapter     _adapter;
 
     private void init() {
-        this.setBackgroundColor(Color.BLUE);
+//        this.setBackgroundColor(Color.BLUE);
         LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.view_image_details, this, true);
         //or

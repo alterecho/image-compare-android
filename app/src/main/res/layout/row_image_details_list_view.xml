@@ -6,11 +6,11 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="#a00"
         android:gravity="center"
         android:textAlignment="textEnd"
+        android:textColor="@android:color/white"
         android:text="title"
-        android:textSize="20dp"
+        android:textSize="15dp"
         />
     <TextView
         android:layout_marginLeft="5dp"
@@ -18,10 +18,10 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="#ff0"
         android:gravity="center"
         android:textAlignment="textStart"
         android:text="hello"
+        android:textColor="@android:color/white"
         android:textSize="20dp"
         />
 </merge>

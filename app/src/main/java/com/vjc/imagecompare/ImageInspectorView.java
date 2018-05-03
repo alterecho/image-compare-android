@@ -60,13 +60,13 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
         _imageView.post(new Runnable() {
             @Override
             public void run() {
-                centerImage();
+                centerImageView();
             }
         });
     }
 
 
-    public void centerImage() {
+    public void centerImageView() {
         _imageView.setX(this.getWidth() * 0.5f - _imageView.getWidth() * 0.5f);
         _imageView.setY(this.getHeight() * 0.5f - _imageView.getHeight() * 0.5f);
     }
@@ -283,8 +283,7 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
         _imageView.post(new Runnable() {
             @Override
             public void run() {
-                _imageView.setX(width_container * 0.5f - _imageView.getWidth() * 0.5f);
-                _imageView.setY(height_container * 0.5f - _imageView.getHeight() * 0.5f);
+                centerImageView();
             }
         });
 
