@@ -134,15 +134,16 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
 //        }
 
 
+
         switch (event.getAction()) {
 
 
             case MotionEvent.ACTION_DOWN:
                 Log.d("ot", "ACTION_DOWN");
+                PointF imageViewPos = this.getImageViewPosition();
                 _touch_delta = new SizeF(
-                        event.getX() - (_imageView.getX() + _imageView.getWidth() * 0.5f),
-                        event.getY() - (_imageView.getY() + _imageView.getHeight() * 0.5f)
-                );
+                        event.getX() - imageViewPos.x,
+                        event.getY() - imageViewPos.y);
                 break;
 
             case MotionEvent.ACTION_MOVE:
@@ -177,8 +178,9 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
                 Parcelable superParcelable = super.onSaveInstanceState();
                 bundle.putParcelable(KEY_SUPER_PARCELABLE, superParcelable);
                 bundle.putParcelable(KEY_BITMAP, bitmap);
-                bundle.putFloat(KEY_POSITION_X, _imageView.getX());
-                bundle.putFloat(KEY_POSITION_Y, _imageView.getY());
+                PointF imageViewPos = this.getImageViewPosition();
+                bundle.putFloat(KEY_POSITION_X, imageViewPos.x);
+                bundle.putFloat(KEY_POSITION_Y, imageViewPos.y);
                 return bundle;
             }
 
@@ -304,8 +306,8 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
     /** Sets the position of Imageview with anchor point at center */
     private void setImageViewPosition(Float x, Float y) {
         PointF p = this.getCorrectedPosition(x, y);
-        _imageView.setX(p.x);
-        _imageView.setY(p.y);
+        _imageView.setX(p.x - _imageView.getWidth() * 0.5f);
+        _imageView.setY(p.y - _imageView.getHeight() * 0.5f);
     }
 
     /** returns the _imageView position */
