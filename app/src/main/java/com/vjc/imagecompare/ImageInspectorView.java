@@ -70,8 +70,10 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
 
 
     public void centerImageView() {
-        _imageView.setX(this.getWidth() * 0.5f - _imageView.getWidth() * 0.5f);
-        _imageView.setY(this.getHeight() * 0.5f - _imageView.getHeight() * 0.5f);
+        this.setPosition(
+                this.getWidth() * 0.5f - _imageView.getWidth() * 0.5f,
+                this.getHeight() * 0.5f - _imageView.getHeight() * 0.5f
+        );
     }
 
     @Override
@@ -148,8 +150,7 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
 
             case MotionEvent.ACTION_MOVE:
                 Log.d("ot", "ACTION_UP");
-                _imageView.setX(x);
-                _imageView.setY(y);
+                this.setPosition(x, y);
                 break;
 
             case MotionEvent.ACTION_UP:
@@ -209,8 +210,7 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
             _imageView.post(new Runnable() {
                 @Override
                 public void run() {
-                    _imageView.setX(x);
-                    _imageView.setY(y);
+                    setPosition(x, y);
                 }
             });
 
@@ -302,6 +302,11 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
 
         Random rnd = new Random();
 //        setBackgroundColor(Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255)));
+    }
+
+    private void setPosition(Float x, Float y) {
+        _imageView.setX(x);
+        _imageView.setY(y);
     }
 
 

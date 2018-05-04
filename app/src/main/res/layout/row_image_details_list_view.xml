@@ -10,7 +10,7 @@
         android:textAlignment="textEnd"
         android:textColor="@android:color/white"
         android:text="title"
-        android:textSize="15dp"
+        android:textSize="14dp"
         />
     <TextView
         android:layout_marginLeft="5dp"
@@ -22,6 +22,6 @@
         android:textAlignment="textStart"
         android:text="hello"
         android:textColor="@android:color/white"
-        android:textSize="20dp"
+        android:textSize="17dp"
         />
 </merge>
