@@ -70,9 +70,9 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
 
 
     public void centerImageView() {
-        this.setPosition(
-                this.getWidth() * 0.5f - _imageView.getWidth() * 0.5f,
-                this.getHeight() * 0.5f - _imageView.getHeight() * 0.5f
+        this.setImageViewPosition(
+                this.getWidth() * 0.5f,
+                this.getHeight() * 0.5f
         );
     }
 
@@ -115,12 +115,9 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
         int width_container = this.getWidth();
         int height_container = this.getHeight();
 
-        int width = _imageView.getWidth();
-        int height = _imageView.getHeight();
-
         /// the new values for the x and y of the _imageView
-        float x = touch_x - _touch_delta.getWidth() - width * 0.5f;
-        float y = touch_y - _touch_delta.getHeight() - height * 0.5f;
+        float x = touch_x - _touch_delta.getWidth();
+        float y = touch_y - _touch_delta.getHeight();
 
 
         // restrict the _imageView within bounds
@@ -150,7 +147,7 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
 
             case MotionEvent.ACTION_MOVE:
                 Log.d("ot", "ACTION_UP");
-                this.setPosition(x, y);
+                this.setImageViewPosition(x, y);
                 break;
 
             case MotionEvent.ACTION_UP:
@@ -210,7 +207,7 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
             _imageView.post(new Runnable() {
                 @Override
                 public void run() {
-                    setPosition(x, y);
+                    setImageViewPosition(x, y);
                 }
             });
 
@@ -304,9 +301,36 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
 //        setBackgroundColor(Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255)));
     }
 
-    private void setPosition(Float x, Float y) {
-        _imageView.setX(x);
-        _imageView.setY(y);
+    /** Sets the position of Imageview with anchor point at center */
+    private void setImageViewPosition(Float x, Float y) {
+        PointF p = this.getCorrectedPosition(x, y);
+        _imageView.setX(p.x);
+        _imageView.setY(p.y);
+    }
+
+    /** returns the _imageView position */
+    private PointF getImageViewPosition() {
+        return new PointF(_imageView.getX(), _imageView.getY());
+    }
+
+    /** returns a point that is restricted point for the _imageView (So as to not move the _imageView out of view completely)*/
+    private PointF getCorrectedPosition(Float x, Float y) {
+        PointF p = new PointF(x, y);
+
+        float border = 10.0f;
+
+        if (p.x + _imageView.getWidth() * 0.5f < border) {
+            p.x = border - _imageView.getWidth() * 0.5f;
+        } else if (p.x + _imageView.getWidth() * 0.5f > this.getWidth() - border) {
+            p.x = this.getWidth() - border - _imageView.getWidth() * 0.5f;
+        }
+
+        if (p.y + _imageView.getHeight() * 0.5f < border) {
+            p.y = border - _imageView.getHeight() * 0.5f;
+        } else if (p.y + _imageView.getHeight() * 0.5f > this.getHeight() - border) {
+            p.y = this.getHeight() - border - _imageView.getHeight() * 0.5f;
+        }
+        return p;
     }
 
 
