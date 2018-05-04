@@ -5,6 +5,10 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Size;
@@ -35,7 +39,6 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
         super(ctx, attr);
         init();
     }
-
 
 
     /** sets the image of the ImageView this view manages */
@@ -161,6 +164,62 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
 
 
 
+    @Nullable
+    @Override
+    protected Parcelable onSaveInstanceState() {
+
+        /*  if there is a bitmap available for the _imageView, use a Bundle object (a subclass of Parcelable) and
+            save the Bitmap and _imaeView position in it, and return it */
+        BitmapDrawable bitmapDrawable = (BitmapDrawable)_imageView.getDrawable();
+        if (bitmapDrawable != null) {
+            Bitmap bitmap = bitmapDrawable.getBitmap();
+
+            if (bitmap != null) {
+                Bundle bundle = new Bundle();
+                Parcelable superParcelable = super.onSaveInstanceState();
+                bundle.putParcelable(KEY_SUPER_PARCELABLE, superParcelable);
+                bundle.putParcelable(KEY_BITMAP, bitmap);
+                bundle.putFloat(KEY_POSITION_X, _imageView.getX());
+                bundle.putFloat(KEY_POSITION_Y, _imageView.getY());
+                return bundle;
+            }
+
+
+        }
+
+        return super.onSaveInstanceState();
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+
+        /* If the state object is an instance of Bundle, extract and set the Bitmap and position for the _imageview */
+        if (state instanceof Bundle) {
+            Bundle bundle = (Bundle)state;
+            state = bundle.getParcelable(KEY_SUPER_PARCELABLE);
+            Bitmap bm = bundle.getParcelable(KEY_BITMAP);
+
+            this.setBitmap(bm);
+
+            final Float x = bundle.getFloat(KEY_POSITION_X);
+            final Float y = bundle.getFloat(KEY_POSITION_Y);
+
+            /// set the _imageView's position after it has been laid out
+            _imageView.post(new Runnable() {
+                @Override
+                public void run() {
+                    _imageView.setX(x);
+                    _imageView.setY(y);
+                }
+            });
+
+
+        }
+
+        super.onRestoreInstanceState(state);
+    }
+
 
 
 
@@ -175,6 +234,12 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
 
     /** difference between where the touch point began, and the _imageView's center */
     private SizeF          _touch_delta = new SizeF(0.0f, 0.0f);
+
+    /** Keys for restoring state */
+    private final static String     KEY_SUPER_PARCELABLE = "super_parcelable";
+    private final static String     KEY_POSITION_X = "pos_x";
+    private final static String     KEY_POSITION_Y = "pos_y";
+    private final static String     KEY_BITMAP = "bitmap";
 
 
     private void init() {
