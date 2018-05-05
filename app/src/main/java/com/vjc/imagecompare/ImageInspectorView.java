@@ -141,6 +141,7 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
             case MotionEvent.ACTION_DOWN:
                 Log.d("ot", "ACTION_DOWN");
                 PointF imageViewPos = this.getImageViewPosition();
+//                PointF imageViewPos = new PointF(_imageView.getX(), _imageView.getY());
                 _touch_delta = new SizeF(
                         event.getX() - imageViewPos.x,
                         event.getY() - imageViewPos.y);
@@ -312,26 +313,29 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
 
     /** returns the _imageView position */
     private PointF getImageViewPosition() {
-        return new PointF(_imageView.getX(), _imageView.getY());
+        return new PointF(_imageView.getX() + _imageView.getWidth() * 0.5f, _imageView.getY() + _imageView.getHeight() * 0.5f);
     }
 
     /** returns a point that is restricted point for the _imageView (So as to not move the _imageView out of view completely)*/
     private PointF getCorrectedPosition(Float x, Float y) {
         PointF p = new PointF(x, y);
 
-        float border = 10.0f;
+//        float border = 10.0f;
+//
+//        int width = _imageView.getWidth(); int height = _imageView.getHeight();
+//
+//        if (p.x + width * 0.5f < border) {
+//            p.x = border - width * 0.5f;
+//        } else if (p.x + width * 0.5f > this.getWidth() - border) {
+//            p.x = this.getWidth() - border - width * 0.5f;
+//        }
+//
+//        if (p.y + height * 0.5f < border) {
+//            p.y = border - height * 0.5f;
+//        } else if (p.y + height * 0.5f > this.getHeight() - border) {
+//            p.y = this.getHeight() - border - height * 0.5f;
+//        }
 
-        if (p.x + _imageView.getWidth() * 0.5f < border) {
-            p.x = border - _imageView.getWidth() * 0.5f;
-        } else if (p.x + _imageView.getWidth() * 0.5f > this.getWidth() - border) {
-            p.x = this.getWidth() - border - _imageView.getWidth() * 0.5f;
-        }
-
-        if (p.y + _imageView.getHeight() * 0.5f < border) {
-            p.y = border - _imageView.getHeight() * 0.5f;
-        } else if (p.y + _imageView.getHeight() * 0.5f > this.getHeight() - border) {
-            p.y = this.getHeight() - border - _imageView.getHeight() * 0.5f;
-        }
         return p;
     }
 
