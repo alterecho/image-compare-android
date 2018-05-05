@@ -141,7 +141,6 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
             case MotionEvent.ACTION_DOWN:
                 Log.d("ot", "ACTION_DOWN");
                 PointF imageViewPos = this.getImageViewPosition();
-//                PointF imageViewPos = new PointF(_imageView.getX(), _imageView.getY());
                 _touch_delta = new SizeF(
                         event.getX() - imageViewPos.x,
                         event.getY() - imageViewPos.y);
@@ -320,21 +319,21 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
     private PointF getCorrectedPosition(Float x, Float y) {
         PointF p = new PointF(x, y);
 
-//        float border = 10.0f;
-//
-//        int width = _imageView.getWidth(); int height = _imageView.getHeight();
-//
-//        if (p.x + width * 0.5f < border) {
-//            p.x = border - width * 0.5f;
-//        } else if (p.x + width * 0.5f > this.getWidth() - border) {
-//            p.x = this.getWidth() - border - width * 0.5f;
-//        }
-//
-//        if (p.y + height * 0.5f < border) {
-//            p.y = border - height * 0.5f;
-//        } else if (p.y + height * 0.5f > this.getHeight() - border) {
-//            p.y = this.getHeight() - border - height * 0.5f;
-//        }
+        float border = 10.0f;
+
+        int width = _imageView.getWidth(); int height = _imageView.getHeight();
+
+        if (p.x + width * 0.5f < border) {
+            p.x = border - width * 0.5f;
+        } else if (p.x - width * 0.5f > this.getWidth() - border) {
+            p.x = this.getWidth() - border + width * 0.5f;
+        }
+
+        if (p.y + height * 0.5f < border) {
+            p.y = border - height * 0.5f;
+        } else if (p.y - height * 0.5f > this.getHeight() - border) {
+            p.y = this.getHeight() - border + height * 0.5f;
+        }
 
         return p;
     }
