@@ -298,9 +298,6 @@ public class ImageInspectorView extends FrameLayout {
         return new PointF(_imageView.getX() + _imageView.getWidth() * 0.5f, _imageView.getY() + _imageView.getHeight() * 0.5f);
     }
 
-
-
-
     /** toggles the _imageView's size between original size of the Bitmap and size that fits within this view */
     private void toggleImageZoom() {
 
