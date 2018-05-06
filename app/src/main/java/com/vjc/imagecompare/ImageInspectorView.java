@@ -81,10 +81,11 @@ public class ImageInspectorView extends FrameLayout {
     public boolean onTouchEvent(MotionEvent event) {
 
 //        _scaleGestureDetector.onTouchEvent(event);
-        _gestureDetector.onTouchEvent(event);
+//        _gestureDetector.onTouchEvent(event);
 //        if (_scaleGestureDetector.onTouchEvent(event) || _gestureDetector.onTouchEvent(event)) {
 //            return true;
 //        }
+//        super.onTouchEvent(event);
 
         float touch_x = event.getX();
         float touch_y = event.getY();
@@ -95,9 +96,9 @@ public class ImageInspectorView extends FrameLayout {
         float x = touch_x - _touch_delta.getWidth();
         float y = touch_y - _touch_delta.getHeight();
 
-        switch (event.getAction()) {
+        switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-                Log.d(null, "ACTION_DOWN");
+                Log.d("otv", "ACTION_DOWN");
                 pointer1 = event.getPointerId(event.getActionIndex());
 
                 return true;
@@ -112,32 +113,43 @@ public class ImageInspectorView extends FrameLayout {
                         event.getY() - imageViewPos.y
                 );
 
-                break;
+                return true;
+
+//                break;
 
             case MotionEvent.ACTION_MOVE:
-                Log.d(null, "ACTION_MOVE");
+//                Log.d("otv", "ACTION_MOVE");
                 if (pointer2 != -1) {
                     float x1 = event.getX(pointer1);
                     float y1 = event.getY(pointer1);
                     float x2 = event.getX(pointer2);
                     float y2 = event.getY(pointer2);
-                    Log.d("pntr1", "(" + x1 + ", " + y1 + ")");
-                    Log.d("pntr2", "(" + x2 + ", " + y2 + ")");
+                    double angle = Math.atan2(y2 - y1,(x2 - x1));
+//                    Log.d("pntr1", "(" + x1 + ", " + y1 + ")");
+//                    Log.d("pntr2", "(" + x2 + ", " + y2 + ")");
+                    Log.d("angle", "" + angle);
                 }
 
                 _imageView.setPosition(x, y);
                 break;
 
             case MotionEvent.ACTION_UP:
-                Log.d(null, "ACTION_UP");
-                
+                pointer1 = -1;
+
+            case MotionEvent.ACTION_POINTER_UP:
+                pointer2 = -1;
+                break;
+
+            case MotionEvent.ACTION_CANCEL:
+                Log.d("otv", "ACTION_UP/CANCEL");
+                pointer1 = pointer2 = -1;
                 break;
 
             default:
                 break;
         }
 
-        return super.onTouchEvent(event);
+        return true;
     }
 
     private int    pointer1 = -1, pointer2 = -1;
