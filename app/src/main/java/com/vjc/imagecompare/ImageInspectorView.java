@@ -28,7 +28,7 @@ import java.util.Random;
  * Manages an ImageView, and allows it to be zoomed and rotated.
  * The bitmap for the ImageView has to using setBitMap method.
  * */
-public class ImageInspectorView extends FrameLayout implements View.OnTouchListener {
+public class ImageInspectorView extends FrameLayout {
 
     public ImageInspectorView(Context context) {
         super(context);
@@ -70,33 +70,67 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
 
 
     public void centerImageView() {
-        this.setImageViewPosition(
+        _imageView.setPosition(
                 this.getWidth() * 0.5f,
                 this.getHeight() * 0.5f
         );
+
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        _scaleGestureDetector.onTouchEvent(event);
+//        _scaleGestureDetector.onTouchEvent(event);
         _gestureDetector.onTouchEvent(event);
 //        if (_scaleGestureDetector.onTouchEvent(event) || _gestureDetector.onTouchEvent(event)) {
 //            return true;
 //        }
 
+        float touch_x = event.getX();
+        float touch_y = event.getY();
+        int width_container = this.getWidth();
+        int height_container = this.getHeight();
+
+        /// the new values for the x and y of the _imageView
+        float x = touch_x - _touch_delta.getWidth();
+        float y = touch_y - _touch_delta.getHeight();
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 Log.d(null, "ACTION_DOWN");
+                pointer1 = event.getPointerId(event.getActionIndex());
 
                 return true;
 
+            case MotionEvent.ACTION_POINTER_DOWN:
+                Log.d("otv", "ACTION_POINTER_DOWN");
+                pointer2 = event.getPointerId(event.getActionIndex());
+
+                PointF imageViewPos = this.getImageViewPosition();
+                _touch_delta = new SizeF(
+                        event.getX() - imageViewPos.x,
+                        event.getY() - imageViewPos.y
+                );
+
+                break;
+
             case MotionEvent.ACTION_MOVE:
                 Log.d(null, "ACTION_MOVE");
+                if (pointer2 != -1) {
+                    float x1 = event.getX(pointer1);
+                    float y1 = event.getY(pointer1);
+                    float x2 = event.getX(pointer2);
+                    float y2 = event.getY(pointer2);
+                    Log.d("pntr1", "(" + x1 + ", " + y1 + ")");
+                    Log.d("pntr2", "(" + x2 + ", " + y2 + ")");
+                }
+
+                _imageView.setPosition(x, y);
                 break;
 
             case MotionEvent.ACTION_UP:
                 Log.d(null, "ACTION_UP");
+                
                 break;
 
             default:
@@ -106,61 +140,7 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
         return super.onTouchEvent(event);
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-
-        float touch_x = event.getX();
-        float touch_y = event.getY();
-
-        int width_container = this.getWidth();
-        int height_container = this.getHeight();
-
-        /// the new values for the x and y of the _imageView
-        float x = touch_x - _touch_delta.getWidth();
-        float y = touch_y - _touch_delta.getHeight();
-
-
-        // restrict the _imageView within bounds
-//        if (x + width > width_container) {
-//            x = width_container - width;
-//        } else if (x < 0.0f) {
-//            x = 0.0f;
-//        }
-//
-//        if (y + height > height_container) {
-//            y = height_container - height;
-//        } else if (y < 0.0f) {
-//            y = 0.0f;
-//        }
-
-
-
-        switch (event.getAction()) {
-
-
-            case MotionEvent.ACTION_DOWN:
-                Log.d("ot", "ACTION_DOWN");
-                PointF imageViewPos = this.getImageViewPosition();
-                _touch_delta = new SizeF(
-                        event.getX() - imageViewPos.x,
-                        event.getY() - imageViewPos.y);
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-                Log.d("ot", "ACTION_UP");
-                this.setImageViewPosition(x, y);
-                break;
-
-            case MotionEvent.ACTION_UP:
-                Log.d("ot", "ACTION_UP");
-                break;
-
-            default:
-                break;
-        }
-        return false;
-    }
-
+    private int    pointer1 = -1, pointer2 = -1;
 
 
     @Nullable
@@ -209,7 +189,7 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
             _imageView.post(new Runnable() {
                 @Override
                 public void run() {
-                    setImageViewPosition(x, y);
+                    _imageView.setPosition(x, y);
                 }
             });
 
@@ -223,7 +203,7 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
 
 
     /** ImageView used to display the selected image */
-    private ImageView       _imageView;
+    private com.vjc.imagecompare.View.ImageView _imageView;
 
     /** for detecting double taps */
     private GestureDetector         _gestureDetector;
@@ -243,7 +223,7 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
 
     private void init() {
         if (_imageView == null) {
-            _imageView = new ImageView(getContext());
+            _imageView = new com.vjc.imagecompare.View.ImageView(getContext());
             _imageView.setBackgroundColor(Color.TRANSPARENT);
             this.addView(_imageView);
         }
@@ -297,17 +277,8 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
             });
         };
 
-        this.setOnTouchListener(this);
-
         Random rnd = new Random();
 //        setBackgroundColor(Color.rgb(rnd.nextInt(255), rnd.nextInt(255), rnd.nextInt(255)));
-    }
-
-    /** Sets the position of Imageview with anchor point at center */
-    private void setImageViewPosition(Float x, Float y) {
-        PointF p = this.getCorrectedPosition(x, y);
-        _imageView.setX(p.x - _imageView.getWidth() * 0.5f);
-        _imageView.setY(p.y - _imageView.getHeight() * 0.5f);
     }
 
     /** returns the _imageView position */
@@ -315,28 +286,7 @@ public class ImageInspectorView extends FrameLayout implements View.OnTouchListe
         return new PointF(_imageView.getX() + _imageView.getWidth() * 0.5f, _imageView.getY() + _imageView.getHeight() * 0.5f);
     }
 
-    /** returns a point that is restricted point for the _imageView (So as to not move the _imageView out of view completely)*/
-    private PointF getCorrectedPosition(Float x, Float y) {
-        PointF p = new PointF(x, y);
 
-        float border = 10.0f;
-
-        int width = _imageView.getWidth(); int height = _imageView.getHeight();
-
-        if (p.x + width * 0.5f < border) {
-            p.x = border - width * 0.5f;
-        } else if (p.x - width * 0.5f > this.getWidth() - border) {
-            p.x = this.getWidth() - border + width * 0.5f;
-        }
-
-        if (p.y + height * 0.5f < border) {
-            p.y = border - height * 0.5f;
-        } else if (p.y - height * 0.5f > this.getHeight() - border) {
-            p.y = this.getHeight() - border + height * 0.5f;
-        }
-
-        return p;
-    }
 
 
     /** toggles the _imageView's size between original size of the Bitmap and size that fits within this view */
