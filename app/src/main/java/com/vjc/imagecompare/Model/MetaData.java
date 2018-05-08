@@ -5,13 +5,17 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.util.Log;
 
+import com.drew.metadata.MetadataException;
+
 import java.io.File;
 import java.io.InputStream;
+import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MetaData {
 
@@ -193,11 +197,16 @@ public class MetaData {
         return array;
     }
 
-    public static List<MetaData> metaDataArrayFrom(Uri imageURI, Context ctx) throws MetaDataException {
+
+    public static List<MetaData> metaDataArrayFrom(Uri imageURI, Context ctx, AtomicReference<ExifInterface> exifInterfaceRef) throws MetaDataException {
         try {
             InputStream iStream = ctx.getContentResolver().openInputStream(imageURI);
             File file = new File(imageURI.getPath());
             ExifInterface exifInterface = new ExifInterface(iStream);
+            if (exifInterfaceRef != null) {
+                exifInterfaceRef.set(exifInterface);
+            }
+
             List<MetaData> list = MetaData.metaDataArrayFrom(exifInterface);
             return list;
 
