@@ -183,9 +183,11 @@ public class MetaData {
         while (iterator.hasNext()) {
             Map.Entry<String, String> entry = (Map.Entry)iterator.next();
             String value = exifInterface.getAttribute(entry.getKey());
+            if (value == null) {
+                value = "--";
+            }
             MetaData metaData = new MetaData(entry.getValue(), value);
 //            MetaData metaData = new MetaData(entry.getKey(), entry.getValue());
-
             array.add(metaData);
         }
         return array;
