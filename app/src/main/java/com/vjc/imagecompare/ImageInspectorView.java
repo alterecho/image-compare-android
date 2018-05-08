@@ -3,11 +3,15 @@ package com.vjc.imagecompare;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -22,7 +26,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.vjc.imagecompare.Model.MetaData;
+
+import java.net.URI;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicReference;
 
 /** A view managed by each ImagenspectorFragment.
  * Manages an ImageView, and allows it to be zoomed and rotated.
@@ -40,6 +49,67 @@ public class ImageInspectorView extends FrameLayout {
         init();
     }
 
+
+    //TODO: move to provider!
+    public void setBitmapFrom(Uri imageUri, AtomicReference<List<MetaData>> metaDataArrayRef) {
+        float bm_angle = 0.0f;
+        int bm_width = 0;
+        int bm_height = 0;
+        int orientation = ExifInterface.ORIENTATION_NORMAL;
+        try {
+
+            //* set the MetaData array for the _imageDetailsView
+            try {
+                AtomicReference<ExifInterface> exifInterfaceAtomicReference = new AtomicReference<>();
+                List<MetaData> metaDataArray = MetaData.metaDataArrayFrom(imageUri, getContext(), exifInterfaceAtomicReference) ;
+                if (metaDataArrayRef != null) {
+                    metaDataArrayRef.set(metaDataArray);
+                }
+                orientation = exifInterfaceAtomicReference.get().getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+
+            } catch (MetaData.MetaDataException e){
+                e.printStackTrace();
+            }
+
+            //* retrieve and set the bitmap for the _imageIspectorView
+            Bitmap bm = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageUri);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    bm_angle = 90.0f;
+                    bm_width = bm.getWidth();
+                    bm_height = bm.getHeight();
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    bm_angle = 180.0f;
+                    bm_width = bm.getWidth();
+                    bm_height = bm.getHeight();
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    bm_angle = 180.0f;
+                    bm_width = bm.getHeight();
+                    bm_height = bm.getWidth();
+                    break;
+                default:
+                    bm_angle = 0.0f;
+                    bm_width = bm.getWidth();
+                    bm_height = bm.getHeight();
+                    break;
+            }
+
+            Matrix matrix = new Matrix();
+            matrix.setRotate(bm_angle);
+            bm = Bitmap.createBitmap(bm, 0, 0, bm_width, bm_height, matrix,true);
+            this.setBitmap(bm);
+
+        } catch (Exception e) {
+            Log.e(null, "unable to create bitmap");
+        }
+//                    catch (ImageProcessingException e) {
+//                        Log.e(null, "unable to process information");
+//                    }
+    }
 
     /** sets the image of the ImageView this view manages */
     public void setBitmap(Bitmap bm) {

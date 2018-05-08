@@ -142,60 +142,9 @@ public class ImageInspectorFragment extends Fragment implements ImageDetailsView
                 if (data != null) {
                     Uri imageURI = data.getData();
 
-                    float bm_angle = 0.0f;
-                    int bm_width = 0;
-                    int bm_height = 0;
-                    int orientation = ExifInterface.ORIENTATION_NORMAL;
-                    try {
-
-                        //* set the MetaData array for the _imageDetailsView
-                        try {
-                            AtomicReference<ExifInterface> exifInterfaceAtomicReference = new AtomicReference<>();
-                            List<MetaData> metaDataArray = MetaData.metaDataArrayFrom(imageURI, getContext(), exifInterfaceAtomicReference) ;
-                            orientation = exifInterfaceAtomicReference.get().getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-                            _imageDetailsView.setData(metaDataArray.toArray(new MetaData[metaDataArray.size()]));
-                        } catch (MetaData.MetaDataException e){
-                            e.printStackTrace();
-                        }
-
-                        //* retrieve and set the bitmap for the _imageIspectorView
-                        Bitmap bm = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageURI);
-
-                        switch (orientation) {
-                            case ExifInterface.ORIENTATION_ROTATE_90:
-                                bm_angle = 90.0f;
-                                bm_width = bm.getWidth();
-                                bm_height = bm.getHeight();
-                                break;
-                            case ExifInterface.ORIENTATION_ROTATE_180:
-                                bm_angle = 180.0f;
-                                bm_width = bm.getWidth();
-                                bm_height = bm.getHeight();
-                                break;
-                            case ExifInterface.ORIENTATION_ROTATE_270:
-                                bm_angle = 180.0f;
-                                bm_width = bm.getHeight();
-                                bm_height = bm.getWidth();
-                                break;
-                            default:
-                                bm_angle = 0.0f;
-                                bm_width = bm.getWidth();
-                                bm_height = bm.getHeight();
-                                break;
-                        }
-
-                        Matrix matrix = new Matrix();
-                        matrix.setRotate(bm_angle);
-                        bm = Bitmap.createBitmap(bm, 0, 0, bm_width, bm_height, matrix,true);
-                        _imageInspectorView.setBitmap(bm);
-
-                    } catch (Exception e) {
-                        Log.e(null, "unable to create bitmap");
-                    }
-//                    catch (ImageProcessingException e) {
-//                        Log.e(null, "unable to process information");
-//                    }
+                    AtomicReference<List<MetaData>> metaDataArrayRef = new AtomicReference<>();
+                    _imageInspectorView.setBitmapFrom(imageURI, metaDataArrayRef);
+                    _imageDetailsView.setData(metaDataArrayRef.get().toArray(new MetaData[metaDataArrayRef.get().size()]));
 
                 }
                 break;
@@ -287,5 +236,5 @@ public class ImageInspectorFragment extends Fragment implements ImageDetailsView
     private void hideImageDetailsView() {
         _imageInspectorView.removeView(_imageDetailsView);
     }
-    
+
 }
