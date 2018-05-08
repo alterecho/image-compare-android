@@ -18,13 +18,13 @@ public class ImageDetailsListViewAdapter extends ArrayAdapter<String> {
     @Override
     public int getCount() {
 
-        return 5;
+//        return 5;
 
-//        if (_dataSet == null) {
-//            return 0;
-//        }
-//
-//        return _dataSet.length;
+        if (_dataSet == null) {
+            return 0;
+        }
+
+        return _dataSet.length;
     }
 
     public void setDataSet(MetaData[] _dataSet) {
