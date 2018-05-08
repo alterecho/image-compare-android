@@ -80,12 +80,13 @@ public class ImageInspectorView extends FrameLayout {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-//        _scaleGestureDetector.onTouchEvent(event);
-//        _gestureDetector.onTouchEvent(event);
+        super.onTouchEvent(event);
+        _scaleGestureDetector.onTouchEvent(event);
+        _gestureDetector.onTouchEvent(event);
 //        if (_scaleGestureDetector.onTouchEvent(event) || _gestureDetector.onTouchEvent(event)) {
 //            return true;
 //        }
-//        super.onTouchEvent(event);
+
 
         float x = event.getX(), y = event.getY();
         float x2 = 0.0f, y2 = 0.0f;
