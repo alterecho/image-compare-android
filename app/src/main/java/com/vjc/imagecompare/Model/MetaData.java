@@ -41,12 +41,12 @@ public class MetaData {
 
     public static List<MetaData> metaDataArrayFrom(ExifInterface exifInterface) {
         ArrayList<MetaData> array = new ArrayList<MetaData>();
-        Iterator iterator = tags.entrySet().iterator();
+        Iterator iterator = MetaData.tags.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, String> entry = (Map.Entry)iterator.next();
             String value = exifInterface.getAttribute(entry.getKey());
-//            MetaData metaData = new MetaData(entry.getValue(), value);
-            MetaData metaData = new MetaData(entry.getKey(), entry.getValue());
+            MetaData metaData = new MetaData(entry.getValue(), value);
+//            MetaData metaData = new MetaData(entry.getKey(), entry.getValue());
 
             array.add(metaData);
         }

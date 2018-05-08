@@ -60,6 +60,7 @@ public class ImageInspectorFragment extends Fragment {
         /** get the reference to the ImageInspectorView instance of this fragment */
         _imageInspectorView = (ImageInspectorView)view.findViewById(R.id.imageInspectorView);
 
+        _imageDetailsView = new ImageDetailsView(getContext());
         return view;
     }
 
@@ -114,9 +115,6 @@ public class ImageInspectorFragment extends Fragment {
             _overlay = new Overlay(ctx);
         }
 
-        if (_imageDetailsView == null) {
-            _imageDetailsView = new ImageDetailsView(ctx);
-        }
         _overlay.show(_imageDetailsView, _imageInspectorView);
     }
 
@@ -196,7 +194,7 @@ public class ImageInspectorFragment extends Fragment {
     private File                    _temporaryImageFile = null;
 
     /** the view used to show image details. CREATED IN THIS FILE */
-    private ImageDetailsView        _imageDetailsView = null;
+    @NonNull private ImageDetailsView        _imageDetailsView = null;
 
     /** to show the Image details as overlay */
     private Overlay                 _overlay;
@@ -211,7 +209,7 @@ public class ImageInspectorFragment extends Fragment {
         }
 
         if (_imageDetailsView == null) {
-            _imageDetailsView = new ImageDetailsView(ctx);
+//            _imageDetailsView = new ImageDetailsView(ctx);
         } else if (_imageDetailsView.getParent() != null) {
             this.hideImageDetailsView();
             return;
@@ -225,7 +223,7 @@ public class ImageInspectorFragment extends Fragment {
         params.height = (int)(_imageInspectorView.getHeight() * 0.75f);
 
         _imageDetailsView.setLayoutParams(params);
-        _imageDetailsView.requestLayout();
+
 
         _imageDetailsView.post(new Runnable() {
             @Override
@@ -234,16 +232,14 @@ public class ImageInspectorFragment extends Fragment {
             }
         });
 
+        _imageDetailsView.requestLayout();
+
 //        Functions.centerView(_imageDetailsView, _imageInspectorView);
 
     }
 
     /** hides the ImageDetails View */
     private void hideImageDetailsView() {
-        if (_imageDetailsView == null) {
-            return;
-        }
-
         _imageInspectorView.removeView(_imageDetailsView);
     }
 
