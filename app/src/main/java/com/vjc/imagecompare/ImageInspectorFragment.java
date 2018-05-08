@@ -26,7 +26,7 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 
 /** Fragment containing the ImageInspectorToolbar and the ImageInspectorView */
-public class ImageInspectorFragment extends Fragment {
+public class ImageInspectorFragment extends Fragment implements ImageDetailsView.Listener {
 
     @Nullable
     @Override
@@ -61,9 +61,15 @@ public class ImageInspectorFragment extends Fragment {
         _imageInspectorView = (ImageInspectorView)view.findViewById(R.id.imageInspectorView);
 
         _imageDetailsView = new ImageDetailsView(getContext());
+        _imageDetailsView.setDelegate(this);
+
         return view;
     }
 
+    @Override
+    public void closeClicked(ImageDetailsView view) {
+        _overlay.hide();
+    }
 
     void addButtonAction() {
         Log.d("ImageInspectorFragment", "addButtonAction");
