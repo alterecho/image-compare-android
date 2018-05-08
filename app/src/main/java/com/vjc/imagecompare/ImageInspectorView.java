@@ -166,24 +166,24 @@ public class ImageInspectorView extends FrameLayout {
 
         /*  if there is a bitmap available for the _imageView, use a Bundle object (a subclass of Parcelable) and
             save the Bitmap and _imaeView position in it, and return it */
-        BitmapDrawable bitmapDrawable = (BitmapDrawable)_imageView.getDrawable();
-        if (bitmapDrawable != null) {
-            Bitmap bitmap = bitmapDrawable.getBitmap();
-
-            if (bitmap != null) {
-                Bundle bundle = new Bundle();
-                Parcelable superParcelable = super.onSaveInstanceState();
-                bundle.putParcelable(KEY_SUPER_PARCELABLE, superParcelable);
-                bundle.putParcelable(KEY_BITMAP, bitmap);
-                PointF imageViewPos = this.getImageViewPosition();
-                bundle.putFloat(KEY_POSITION_X, imageViewPos.x);
-                bundle.putFloat(KEY_POSITION_Y, imageViewPos.y);
-                bundle.putInt(KEY_WIDTH, _imageView.getWidth());
-                bundle.putInt(KEY_HEIGHT, _imageView.getHeight());
-                bundle.putFloat(KEY_ANGLE, _imageView.getRotation());
-                return bundle;
-            }
-        }
+//        BitmapDrawable bitmapDrawable = (BitmapDrawable)_imageView.getDrawable();
+//        if (bitmapDrawable != null) {
+//            Bitmap bitmap = bitmapDrawable.getBitmap();
+//
+//            if (bitmap != null) {
+//                Bundle bundle = new Bundle();
+//                Parcelable superParcelable = super.onSaveInstanceState();
+//                bundle.putParcelable(KEY_SUPER_PARCELABLE, superParcelable);
+//                bundle.putParcelable(KEY_BITMAP, bitmap);
+//                PointF imageViewPos = this.getImageViewPosition();
+//                bundle.putFloat(KEY_POSITION_X, imageViewPos.x);
+//                bundle.putFloat(KEY_POSITION_Y, imageViewPos.y);
+//                bundle.putInt(KEY_WIDTH, _imageView.getWidth());
+//                bundle.putInt(KEY_HEIGHT, _imageView.getHeight());
+//                bundle.putFloat(KEY_ANGLE, _imageView.getRotation());
+//                return bundle;
+//            }
+//        }
 
         return super.onSaveInstanceState();
 
@@ -193,33 +193,33 @@ public class ImageInspectorView extends FrameLayout {
     protected void onRestoreInstanceState(Parcelable state) {
 
         /* If the state object is an instance of Bundle, extract and set the Bitmap and position for the _imageview */
-        if (state instanceof Bundle) {
-            Bundle bundle = (Bundle)state;
-            state = bundle.getParcelable(KEY_SUPER_PARCELABLE);
-            Bitmap bm = bundle.getParcelable(KEY_BITMAP);
-
-            this.setBitmap(bm);
-
-            final Float x = bundle.getFloat(KEY_POSITION_X);
-            final Float y = bundle.getFloat(KEY_POSITION_Y);
-            final int width = bundle.getInt(KEY_WIDTH);
-            final int height = bundle.getInt(KEY_HEIGHT);
-            final float angle = bundle.getFloat(KEY_ANGLE);
-
-            _imageView.getLayoutParams().width = width;
-            _imageView.getLayoutParams().height = height;
-
-            /// set the _imageView's position after it has been laid out
-            _imageView.post(new Runnable() {
-                @Override
-                public void run() {
-                    _imageView.setPosition(x, y);
-                    _imageView.setRotation(angle);
-                }
-            });
-
-
-        }
+//        if (state instanceof Bundle) {
+//            Bundle bundle = (Bundle)state;
+//            state = bundle.getParcelable(KEY_SUPER_PARCELABLE);
+//            Bitmap bm = bundle.getParcelable(KEY_BITMAP);
+//
+//            this.setBitmap(bm);
+//
+//            final Float x = bundle.getFloat(KEY_POSITION_X);
+//            final Float y = bundle.getFloat(KEY_POSITION_Y);
+//            final int width = bundle.getInt(KEY_WIDTH);
+//            final int height = bundle.getInt(KEY_HEIGHT);
+//            final float angle = bundle.getFloat(KEY_ANGLE);
+//
+//            _imageView.getLayoutParams().width = width;
+//            _imageView.getLayoutParams().height = height;
+//
+//            /// set the _imageView's position after it has been laid out
+//            _imageView.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    _imageView.setPosition(x, y);
+//                    _imageView.setRotation(angle);
+//                }
+//            });
+//
+//
+//        }
 
         super.onRestoreInstanceState(state);
     }
