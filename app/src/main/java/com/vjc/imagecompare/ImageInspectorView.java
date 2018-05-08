@@ -96,7 +96,11 @@ public class ImageInspectorView extends FrameLayout {
             case MotionEvent.ACTION_DOWN:
                 Log.d("otv", "ACTION_DOWN");
                 pointer1 = event.getPointerId(event.getActionIndex());
-
+                PointF imageViewPos = this.getImageViewPosition();
+                _touch_delta = new SizeF(
+                        event.getX() - imageViewPos.x,
+                        event.getY() - imageViewPos.y
+                );
                 return true;
 
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -113,11 +117,7 @@ public class ImageInspectorView extends FrameLayout {
 
                 _angle_initial = Math.toRadians(_imageView.getRotation());
                 Log.d("ang initi", "" + Math.toDegrees(_angle_initial));
-                PointF imageViewPos = this.getImageViewPosition();
-                _touch_delta = new SizeF(
-                        event.getX() - imageViewPos.x,
-                        event.getY() - imageViewPos.y
-                );
+
 
                 return true;
 
