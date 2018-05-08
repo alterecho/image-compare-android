@@ -92,10 +92,6 @@ public class ImageInspectorView extends FrameLayout {
         float x2 = 0.0f, y2 = 0.0f;
         int width_container = this.getWidth(), height_container = this.getHeight();
 
-        /// the new values for the x and y of the _imageView
-//        float x = touch_x - _touch_delta.getWidth();
-//        float y = touch_y - _touch_delta.getHeight();
-
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 Log.d("otv", "ACTION_DOWN");
@@ -182,11 +178,11 @@ public class ImageInspectorView extends FrameLayout {
                 PointF imageViewPos = this.getImageViewPosition();
                 bundle.putFloat(KEY_POSITION_X, imageViewPos.x);
                 bundle.putFloat(KEY_POSITION_Y, imageViewPos.y);
+                bundle.putInt(KEY_WIDTH, _imageView.getWidth());
+                bundle.putInt(KEY_HEIGHT, _imageView.getHeight());
                 bundle.putFloat(KEY_ANGLE, _imageView.getRotation());
                 return bundle;
             }
-
-
         }
 
         return super.onSaveInstanceState();
@@ -206,7 +202,13 @@ public class ImageInspectorView extends FrameLayout {
 
             final Float x = bundle.getFloat(KEY_POSITION_X);
             final Float y = bundle.getFloat(KEY_POSITION_Y);
+            final int width = bundle.getInt(KEY_WIDTH);
+            final int height = bundle.getInt(KEY_HEIGHT);
             final float angle = bundle.getFloat(KEY_ANGLE);
+
+            _imageView.getLayoutParams().width = width;
+            _imageView.getLayoutParams().height = height;
+
             /// set the _imageView's position after it has been laid out
             _imageView.post(new Runnable() {
                 @Override
@@ -242,8 +244,8 @@ public class ImageInspectorView extends FrameLayout {
 
     /** Keys for restoring state */
     private final static String     KEY_SUPER_PARCELABLE = "super_parcelable";
-    private final static String     KEY_POSITION_X = "pos_x";
-    private final static String     KEY_POSITION_Y = "pos_y";
+    private final static String     KEY_POSITION_X = "pos_x", KEY_POSITION_Y = "pos_y";
+    private final static String     KEY_WIDTH = "width", KEY_HEIGHT = "height";
     private final static String     KEY_ANGLE = "angle"; // angle of the _imageView
     private final static String     KEY_BITMAP = "bitmap";
 
