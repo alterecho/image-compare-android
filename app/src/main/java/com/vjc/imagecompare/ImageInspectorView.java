@@ -180,13 +180,10 @@ public class ImageInspectorView extends FrameLayout {
                 y2 = event.getY(pointer2);
                 Log.d("otv", String.format("ACTION_POINTER_DOWN p1:(%f, %f), p2:(%f, %f)", x, y, x2, y2));
 
-                _angle_initial = Math.atan2(
-                        x2 - x,
-                        y2 - y
-                );
+                _angle_initial = Math.atan2(y2 - y, x2 - x);
 
-                _angle_initial = Math.toRadians(_imageView.getRotation());
-                Log.d("ang initi", "" + Math.toDegrees(_angle_initial));
+                _angle_initial_imageView = Math.toRadians(_imageView.getRotation());
+                Log.d("ang initial", "" + Math.toDegrees(_angle_initial));
 
 
                 return true;
@@ -195,14 +192,16 @@ public class ImageInspectorView extends FrameLayout {
 
             case MotionEvent.ACTION_MOVE:
 //                Log.d("otv", "ACTION_MOVE");
-                if (_imageView != null) {
-                    if (pointer2 != -1) {
+                if (_imageView != null && pointer2 != -1) {
                         x2 = event.getX(pointer2);
                         y2 = event.getY(pointer2);
                         double angle = Math.atan2(y2 - y,(x2 - x));
-                        float rot = _imageView.getRotation();
-                        _imageView.setRotation((float)Math.toDegrees(_angle_initial + angle));
-                    }
+                        Log.d("rota", String.format("imageRot:%f, angle: %f", Math.toDegrees(_imageView.getRotation()), Math.toDegrees(angle)));
+                        _imageView.setRotation((float)Math.toDegrees(_angle_initial_imageView + (angle - _angle_initial)));
+//                        _imageView.setRotation(_imageView.getRotation() + 1.0f);
+                        return true;
+                } else {
+                    
                 }
 
                 _imageView.setPosition(x - _touch_delta.getWidth(), y - _touch_delta.getHeight());
@@ -310,7 +309,8 @@ public class ImageInspectorView extends FrameLayout {
     private SizeF       _touch_delta = new SizeF(0.0f, 0.0f);
 
     /** the angle when the rotation gesture begins */
-    private double       _angle_initial = 0.0f;
+    private double      _angle_initial = 0.0f;
+    private double      _angle_initial_imageView = 0.0f;
 
     /** Keys for restoring state */
     private final static String     KEY_SUPER_PARCELABLE = "super_parcelable";
