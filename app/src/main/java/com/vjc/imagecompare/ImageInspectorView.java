@@ -162,10 +162,18 @@ public class ImageInspectorView extends FrameLayout {
         float x2 = 0.0f, y2 = 0.0f;
         int width_container = this.getWidth(), height_container = this.getHeight();
 
+        // * index and pointer index of the current event;
+        int pointerIDX = event.getActionIndex();
+        int pointerID = event.getPointerId(pointerIDX);
+
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 Log.d("otv", "ACTION_DOWN");
-                pointer1 = event.getPointerId(event.getActionIndex());
+
+                pointer1IDX = pointerIDX;
+                pointer1ID = pointerID;
+
+
                 PointF imageViewPos = this.getImageViewPosition();
                 _touch_delta = new SizeF(
                         event.getX() - imageViewPos.x,
@@ -174,10 +182,11 @@ public class ImageInspectorView extends FrameLayout {
                 return true;
 
             case MotionEvent.ACTION_POINTER_DOWN:
-                pointer2 = event.getPointerId(event.getActionIndex());
+                pointer2IDX = pointerIDX;
+                pointer2IDX = pointerID;
 
-                x2 = event.getX(pointer2);
-                y2 = event.getY(pointer2);
+                x2 = event.getX(pointer2IDX);
+                y2 = event.getY(pointer2IDX);
                 Log.d("otv", String.format("ACTION_POINTER_DOWN p1:(%f, %f), p2:(%f, %f)", x, y, x2, y2));
 
                 _angle_initial = Math.atan2(y2 - y, x2 - x);
@@ -192,31 +201,35 @@ public class ImageInspectorView extends FrameLayout {
 
             case MotionEvent.ACTION_MOVE:
 //                Log.d("otv", "ACTION_MOVE");
-                if (_imageView != null && pointer2 != -1) {
-                        x2 = event.getX(pointer2);
-                        y2 = event.getY(pointer2);
+                if (_imageView != null && pointer2IDX != -1) {
+                        x2 = event.getX(pointer2IDX);
+                        y2 = event.getY(pointer2IDX);
                         double angle = Math.atan2(y2 - y,(x2 - x));
                         Log.d("rota", String.format("imageRot:%f, angle: %f", Math.toDegrees(_imageView.getRotation()), Math.toDegrees(angle)));
                         _imageView.setRotation((float)Math.toDegrees(_angle_initial_imageView + (angle - _angle_initial)));
-//                        _imageView.setRotation(_imageView.getRotation() + 1.0f);
                         return true;
                 } else {
-                    
+
                 }
 
-                _imageView.setPosition(x - _touch_delta.getWidth(), y - _touch_delta.getHeight());
+                if (pointerID == pointer1ID) {
+                    _imageView.setPosition(x - _touch_delta.getWidth(), y - _touch_delta.getHeight());
+                }
+
+
                 break;
 
             case MotionEvent.ACTION_UP:
-                pointer1 = -1;
+                pointer1ID = pointer1IDX = -1;
 
             case MotionEvent.ACTION_POINTER_UP:
-                pointer2 = -1;
+                pointer2ID = pointer2IDX = -1;
                 break;
 
             case MotionEvent.ACTION_CANCEL:
                 Log.d("otv", "ACTION_UP/CANCEL");
-                pointer1 = pointer2 = -1;
+                pointer1ID = pointer1IDX = -1;
+                pointer2ID = pointer2IDX = -1;
                 break;
 
             default:
@@ -226,7 +239,7 @@ public class ImageInspectorView extends FrameLayout {
         return true;
     }
 
-    private int    pointer1 = -1, pointer2 = -1;
+    private int    pointer1ID = -1, pointer1IDX = -1, pointer2ID = -1, pointer2IDX = -1;
 
 
     @Nullable
