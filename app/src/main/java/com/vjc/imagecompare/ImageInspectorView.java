@@ -340,8 +340,10 @@ public class ImageInspectorView extends FrameLayout {
     private final static String     KEY_ANGLE = "angle"; // angle of the _imageView
     private final static String     KEY_BITMAP = "bitmap";
 
+    /** to cache bitmap on screen orientaion change (onSaveInstanceState, onRestoreInstanceState) */
     private static LruCache<String, Bitmap>        _bitmapCache;
-    static {
+
+    private static void initCaches() {
         // setup cache for bitmap
         int availableCache = (int)Runtime.getRuntime().maxMemory() / 1024;
         _bitmapCache = new LruCache<String, Bitmap>(availableCache) {
@@ -350,6 +352,10 @@ public class ImageInspectorView extends FrameLayout {
                 return bitmap.getByteCount() / 1024;
             }
         };
+    }
+
+    static {
+        initCaches();
     }
 
 
