@@ -1,7 +1,9 @@
 package com.vjc.imagecompare;
 
 import android.graphics.PointF;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.util.SizeF;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,5 +47,19 @@ public class Functions {
             ViewGroup viewGroup = (ViewGroup)viewParent;
             viewGroup.removeView(view);
         }
+    }
+
+    static String stringFrom(Bundle bundle) {
+        String ret = "bundle:\n";
+
+        for (String key : bundle.keySet()) {
+            ret += key + ": " + bundle.get(key).toString();
+        }
+
+        return ret;
+    }
+
+    static void print(Bundle bundle) {
+        Log.d("bundle", stringFrom(bundle));
     }
 }
