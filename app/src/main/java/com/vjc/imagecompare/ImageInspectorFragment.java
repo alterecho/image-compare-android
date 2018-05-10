@@ -102,6 +102,7 @@ public class ImageInspectorFragment extends Fragment implements ImageDetailsView
 //        }
 
 
+        //TODO: use FileProvider instead
         _tempFile = getContext().getExternalFilesDir(null);
 
 
