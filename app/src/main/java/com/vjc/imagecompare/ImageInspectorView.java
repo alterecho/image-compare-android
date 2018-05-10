@@ -269,7 +269,7 @@ public class ImageInspectorView extends FrameLayout {
                 Bundle bundle = new Bundle();
                 Parcelable superParcelable = super.onSaveInstanceState();
                 bundle.putParcelable(KEY_SUPER_PARCELABLE, superParcelable);
-                bundle.putParcelable(KEY_BITMAP, bitmap);
+//                bundle.putParcelable(KEY_BITMAP, bitmap);
                 PointF imageViewPos = this.getImageViewPosition();
                 bundle.putFloat(KEY_POSITION_X, imageViewPos.x);
                 bundle.putFloat(KEY_POSITION_Y, imageViewPos.y);
