@@ -2,6 +2,7 @@ package com.vjc.imagecompare;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
@@ -10,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -29,6 +31,7 @@ import android.widget.RelativeLayout;
 
 import com.vjc.imagecompare.Model.MetaData;
 
+import java.io.FileDescriptor;
 import java.net.URI;
 import java.util.List;
 import java.util.Random;
@@ -74,7 +77,16 @@ public class ImageInspectorView extends FrameLayout {
             }
 
             //* retrieve and set the bitmap for the _imageIspectorView
-            Bitmap bm = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageUri);
+//            Bitmap bm = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), imageUri);
+
+            ParcelFileDescriptor pfd = getContext().getContentResolver().openFileDescriptor(imageUri, "r");
+            FileDescriptor fd = pfd.getFileDescriptor();
+            Bitmap bm = BitmapFactory.decodeFileDescriptor(fd);
+            pfd.close();
+
+            if (bm == null) {
+
+            }
 
             switch (orientation) {
                 case ExifInterface.ORIENTATION_ROTATE_90:

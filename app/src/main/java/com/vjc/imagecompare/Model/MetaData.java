@@ -201,7 +201,6 @@ public class MetaData {
     public static List<MetaData> metaDataArrayFrom(Uri imageURI, Context ctx, AtomicReference<ExifInterface> exifInterfaceRef) throws MetaDataException {
         try {
             InputStream iStream = ctx.getContentResolver().openInputStream(imageURI);
-            File file = new File(imageURI.getPath());
             ExifInterface exifInterface = new ExifInterface(iStream);
             if (exifInterfaceRef != null) {
                 exifInterfaceRef.set(exifInterface);

@@ -4,15 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +25,11 @@ import android.widget.ImageButton;
 import com.vjc.imagecompare.Model.MetaData;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -89,26 +95,36 @@ public class ImageInspectorFragment extends Fragment implements ImageDetailsView
         Log.d("ImageInspectorFragment", "cameraButtonAction");
 
         /// Support for API 15
-        if (this.getContext().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+//        if (this.getContext().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+//
+//        } else {
+//
+//        }
 
+
+        _tempFile = getContext().getExternalFilesDir(null);
+
+
+        if (_tempFile != null) {
+            try {
+                _tempFile = File.createTempFile("tmp", ".jpg", _tempFile);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                Uri uri = Uri.fromFile(_tempFile);
+
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+
+                startActivityForResult(intent, REQUEST_CODE_IMAGE_CAMERA);
+            } catch (IOException e) {
+                e.printStackTrace();
+                _tempFile = null;
+            }
         } else {
 
         }
 
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        try {
-            _temporaryImageFile = File.createTempFile("temp", ".jpg", dir);
-        } catch (IOException exception) {
-            _temporaryImageFile = null;
-        }
-
-        if (_temporaryImageFile != null) {
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, _temporaryImageFile.toURI());
-//            startActivityForResult(intent, REQUEST_CODE_IMAGE_CAMERA);
-        }
-
-        startActivityForResult(intent, REQUEST_CODE_IMAGE_CAMERA);
     }
 
     void detailsButtonAction() {
@@ -149,17 +165,12 @@ public class ImageInspectorFragment extends Fragment implements ImageDetailsView
                 }
                 break;
             case REQUEST_CODE_IMAGE_CAMERA:
-                /** can do by fetching Bitmap directly */
-//                Bitmap bm = (Bitmap) data.getExtras().get("data");
-//                try {
-//                    Bitmap bm = (Bitmap)MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), Uri.parse(_temporaryImageFile.toURI().toString()));
-//                } catch (IOException exception) {
-//
-//                }
-
-                Bitmap bm = (Bitmap) data.getExtras().get("data");
-                _imageInspectorView.setBitmap(bm);
-
+                if (_tempFile != null) {
+                    Uri imageUri = Uri.fromFile(_tempFile);
+                    AtomicReference<List<MetaData>> metaDataArrayRef = new AtomicReference<>();
+                    _imageInspectorView.setBitmapFrom(imageUri, metaDataArrayRef);
+                    _imageDetailsView.setData(metaDataArrayRef.get().toArray(new MetaData[metaDataArrayRef.get().size()]));
+                }
                 break;
 
             default:
@@ -185,7 +196,7 @@ public class ImageInspectorFragment extends Fragment implements ImageDetailsView
     private ImageInspectorView      _imageInspectorView = null;
 
     /** file used to store temporary images (from camera capture) */
-    private File                    _temporaryImageFile = null;
+    private File             _tempFile;
 
     /** the view used to show image details. CREATED IN THIS FILE */
     @NonNull private ImageDetailsView        _imageDetailsView = null;
