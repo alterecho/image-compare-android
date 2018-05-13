@@ -1,1 +1,1 @@
-include ':app', ':imagecompare'
+include ':app', ':imagecompare', ':resources'

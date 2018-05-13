@@ -17,7 +17,7 @@ import java.util.*
 class ImageInspectorFragment constructor() : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val view = inflater?.inflate(R.layout.fragment_image_inspector, container, false)
+        val view = inflater?.inflate(com.vjc.imagecompare.R.layout.fragment_image_inspector, container, false)
 
 
         view?.let {
