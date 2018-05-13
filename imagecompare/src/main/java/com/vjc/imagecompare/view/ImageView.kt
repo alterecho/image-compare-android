@@ -29,9 +29,11 @@ class ImageView constructor(ctx: Context) : ImageView(ctx) {
         get() = PointF(this.x + width * 0.5f, this.y + height * 0.5f)
         set(value) {
             val size = Size(width, height)
+            val p = this.getCorrectedPosition(value)
 
-            this.x = value.x - size.width * 0.5f
-            this.y = value.y - size.height * 0.5f
+            this.x = p.x
+            this.y = p.y
+
         }
 
     var size: SizeF
@@ -65,6 +67,29 @@ class ImageView constructor(ctx: Context) : ImageView(ctx) {
             }
 
         }
+    }
 
+    private fun getCorrectedPosition(point: PointF): PointF {
+        var x = point.x - size.width * 0.5f
+        var y = point.y - size.height * 0.5f
+
+        val margin = 10.0f
+
+        if (this.parent is ViewGroup) {
+            val viewGroup =  this.parent as ViewGroup
+            if (x + size.width < margin) {
+                x = -size.width + margin
+            } else if (x > viewGroup.width - margin) {
+                x = viewGroup.width - margin
+            }
+
+            if (y + size.height < margin) {
+                y = -size.height + margin
+            } else if (y > viewGroup.height - margin) {
+                y = viewGroup.height - margin
+            }
+        }
+
+        return PointF(x, y)
     }
 }
