@@ -26,7 +26,7 @@ class ImageDetailsView : LinearLayout {
     public fun showIn(viewGroup: ViewGroup) {
         viewGroup.removeView(this)
         viewGroup.addView(this)
-        val layoutParam = this!!.layoutParams
+        val layoutParam = this.layoutParams
         layoutParam.width = (viewGroup.width * 0.75f).toInt()
         layoutParam.height = (viewGroup.height * 0.75f).toInt()
         viewGroup.requestLayout()

@@ -54,7 +54,7 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
 
         event?.let {
             val p = PointF(it.x, it.y);
-            var p2 = PointF()
+            var p2: PointF
             var angle = 0.0f
             val pointer2 = _pointer2
             if (pointer2 != null) {
