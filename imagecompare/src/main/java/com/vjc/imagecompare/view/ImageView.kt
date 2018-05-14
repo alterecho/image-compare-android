@@ -69,10 +69,12 @@ class ImageView constructor(ctx: Context) : ImageView(ctx) {
         }
     }
 
+    /** returns a point that will restrict the ImageView(this) from moving out of screen */
     private fun getCorrectedPosition(point: PointF): PointF {
         var x = point.x - size.width * 0.5f
         var y = point.y - size.height * 0.5f
 
+        // margin boundary
         val margin = 10.0f
 
         if (this.parent is ViewGroup) {

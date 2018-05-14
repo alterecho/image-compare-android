@@ -5,7 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.*
 import com.vjc.imagecompare.R
 import com.vjc.imagecompare.extensions.center
 
@@ -13,8 +13,12 @@ class ImageDetailsView : LinearLayout {
 
     init {
         val inflater = this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        inflater.inflate(R.layout.view_details, this, true)
+        val view = inflater.inflate(R.layout.view_details, this, true)
 //        View.inflate(this.context, R.layout.view_details, this)
+
+        _listView = view.findViewById(R.id.listView)
+        _listView.adapter = DetailsListViewAdapter(this.context)
+
     }
 
     constructor(ctx: Context) : super(ctx)
@@ -44,5 +48,10 @@ class ImageDetailsView : LinearLayout {
 
         (this.parent as ViewGroup).removeView(this)
     }
+
+
+
+
+    private val _listView: ListView
 
 }
