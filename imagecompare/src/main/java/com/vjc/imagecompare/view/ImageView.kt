@@ -17,8 +17,8 @@ class ImageView constructor(ctx: Context) : ImageView(ctx) {
         set(value){
             field = value
             this.setImageBitmap(field)
-            this.layoutParams.width = 100
-            this.layoutParams.height = 100
+            this.layoutParams.width = 0
+            this.layoutParams.height = 0
             field?.let {
                 this.layoutParams.width = it.width
                 this.layoutParams.height = it.height
