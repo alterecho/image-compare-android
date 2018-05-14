@@ -122,7 +122,10 @@ class ImageInspectorFragment constructor() : Fragment() {
             _imageDetailsView = ImageDetailsView(this.context)
         }
 
-        _imageDetailsView!!.showIn(viewGroup)
+        if (_imageInspectorView != null) {
+            _imageDetailsView!!.showIn(_imageInspectorView!!)
+        }
+
     }
 
     private fun hideImageDetailsView() {
