@@ -1,6 +1,7 @@
 package com.vjc.imagecompare.view
 
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.*
 import com.vjc.imagecompare.R
 import com.vjc.imagecompare.extensions.center
+import com.vjc.imagecompare.extensions.removeFromParent
 import com.vjc.imagecompare.model.MetaData
 
 class ImageDetailsView : LinearLayout {
@@ -36,8 +38,19 @@ class ImageDetailsView : LinearLayout {
 //    get() = this.parent != null
 
     public fun showIn(viewGroup: ViewGroup) {
+
+        // remove the views
+        if (overlay == null) {
+            _overlay?.removeFromParent()
+        } else {
+            this.initOverlay()
+        }
         viewGroup.removeView(this)
+
+        // add the views
+        viewGroup.addView(_overlay!!)
         viewGroup.addView(this)
+
         val layoutParam = this.layoutParams
         layoutParam.width = (viewGroup.width * 0.75f).toInt()
         layoutParam.height = (viewGroup.height * 0.75f).toInt()
@@ -49,12 +62,18 @@ class ImageDetailsView : LinearLayout {
         })
     }
 
-    fun hide() {
-        if (this.parent !is ViewGroup) {
+    fun close() {
+
+        val parent = this.parent
+
+        if (parent !is ViewGroup) {
             return
         }
 
-        (this.parent as ViewGroup).removeView(this)
+        parent.removeView(this)
+        _overlay?.let {
+            parent.removeView(it)
+        }
     }
 
 
@@ -62,5 +81,17 @@ class ImageDetailsView : LinearLayout {
 
     private val _listView: ListView
     private val _adapter: DetailsListViewAdapter
+
+    /** a semi-transparent overlay view that will be placed on parent before placing 'this' on parentView */
+    private var _overlay: View? = null
+
+    private fun initOverlay() {
+        _overlay = View(this.context)
+        _overlay?.setBackgroundColor(Color.argb(125, 0, 0, 0))
+        _overlay?.setOnClickListener( {
+            close()
+        })
+
+    }
 
 }

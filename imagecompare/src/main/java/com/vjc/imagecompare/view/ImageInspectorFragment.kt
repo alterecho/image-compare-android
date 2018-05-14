@@ -129,7 +129,7 @@ class ImageInspectorFragment constructor() : Fragment() {
     }
 
     private fun hideImageDetailsView() {
-        _imageDetailsView?.hide()
+        _imageDetailsView?.close()
     }
 }
 

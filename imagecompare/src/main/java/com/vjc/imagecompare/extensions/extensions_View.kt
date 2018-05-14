@@ -11,3 +11,14 @@ fun View.center() {
         this.y = parentViewGroup.height * 0.5f - this.height * 0.5f
     }
 }
+
+fun View.removeFromParent(): Boolean {
+    if (this.parent == null || this.parent !is ViewGroup) {
+        return false
+    }
+
+    val viewGroup = this.parent as ViewGroup
+    viewGroup.removeView(this)
+
+    return true
+}
