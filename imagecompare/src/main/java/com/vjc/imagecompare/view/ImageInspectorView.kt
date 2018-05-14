@@ -19,13 +19,10 @@ import kotlin.math.atan2
 
 class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListener {
 
-    constructor(ctx: Context) : super(ctx){
-        init()
+    constructor(ctx: Context) : super(ctx) {
     }
 
-    constructor(ctx: Context, attr: AttributeSet) : this(ctx) {
-
-    }
+    constructor(ctx: Context, attrs: AttributeSet) : super(ctx, attrs)
 
     var bitmap: Bitmap? = null
         get() = _imageView.bitmap
@@ -133,6 +130,9 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
     }
 
 
+
+
+
     private val _imageView: ImageView = ImageView(this.context)
 
     private val _scaleGestureDetector: ScaleGestureDetector = ScaleGestureDetector(this.context, this)
@@ -169,15 +169,11 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
 
     private var _scaleFactor = 1.0f;
 
-    private fun init() {
+
+    init {
         setBackgroundColor(Color.CYAN)
         this.addView(_imageView)
         _imageView.setBackgroundColor(Color.RED)
         this.bitmap = null
-
     }
-
-
-
-
 }
