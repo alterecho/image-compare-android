@@ -172,7 +172,6 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
 
 
     init {
-        setBackgroundColor(Color.CYAN)
         this.addView(_imageView)
         _imageView.setBackgroundColor(Color.RED)
         this.bitmap = null

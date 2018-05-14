@@ -23,7 +23,8 @@ class ImageInspectorFragment constructor() : Fragment() {
 
         view?.let {
             val random = Random();
-            it.setBackgroundColor(Color.rgb(random.nextInt(255), random.nextInt(255), random.nextInt(255)))
+
+            it.setBackgroundColor(this.context.getColor(R.color.theme))
 
             _imageInspectorView = it.findViewById<ImageInspectorView>(R.id.imageInspectorView)
 

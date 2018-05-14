@@ -8,7 +8,7 @@
         android:id="@+id/toolbarLayout"
         android:layout_width="match_parent"
         android:layout_height="44dp"
-        android:background="#000"
+        android:background="@color/theme"
         android:gravity="center"
         >
 
@@ -68,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#f00">
+        android:background="@color/themeSecondary">
 
     </com.vjc.imagecompare.view.ImageInspectorView>
 
