@@ -25,6 +25,11 @@ class ImageDetailsView : LinearLayout {
         val view = inflater.inflate(R.layout.view_details, this, true)
 //        View.inflate(this.context, R.layout.view_details, this)
 
+        val closeButton = view.findViewById<Button>(R.id.closeButton)
+        if (closeButton != null) {
+            closeButton.setOnClickListener { close() }
+        }
+
         _listView = view.findViewById(R.id.listView)
         _adapter = DetailsListViewAdapter(this.context)
         _listView.adapter = _adapter
