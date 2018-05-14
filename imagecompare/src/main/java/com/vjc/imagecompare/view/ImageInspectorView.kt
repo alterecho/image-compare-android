@@ -24,11 +24,11 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
 
     constructor(ctx: Context, attrs: AttributeSet) : super(ctx, attrs)
 
-    var bitmap: Bitmap? = null
+    var bitmap: Bitmap?
         get() = _imageView.bitmap
 
         set(value) {
-            _imageView.bitmap = field
+            _imageView.bitmap = value
         }
 
     var bitmapUri: Uri? = null
