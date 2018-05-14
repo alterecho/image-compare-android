@@ -8,6 +8,7 @@ import android.util.Size
 import android.util.SizeF
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.vjc.imagecompare.extensions.center
 
 class ImageView constructor(ctx: Context) : ImageView(ctx) {
 
@@ -67,6 +68,12 @@ class ImageView constructor(ctx: Context) : ImageView(ctx) {
             }
 
         }
+    }
+
+    fun reset() {
+        this.toggleImageSize()
+        this.center()
+        this.rotation = 0.0f
     }
 
     /** returns a point that will restrict the ImageView(this) from moving out of screen */

@@ -29,6 +29,7 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
 
         set(value) {
             _imageView.bitmap = value
+            _imageView.reset()
         }
 
     var bitmapUri: Uri? = null
@@ -143,7 +144,7 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
             _imageView.toggleImageSize()
             _imageView.post(object : Runnable {
                 override fun run() {
-                    _imageView.center()
+                    _imageView.reset()
                 }
             })
             return super.onDoubleTap(e)
