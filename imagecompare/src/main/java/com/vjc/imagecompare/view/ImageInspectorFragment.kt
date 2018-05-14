@@ -57,7 +57,8 @@ class ImageInspectorFragment constructor() : Fragment() {
     }
 
     fun addButtonAction() {
-        println("addButtonAction");
+        _imageDetailsView?.close()
+
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
 
@@ -65,7 +66,7 @@ class ImageInspectorFragment constructor() : Fragment() {
     }
 
     fun cameraButtonAction() {
-        print("cameraButtonAction")
+        _imageDetailsView?.close()
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
 

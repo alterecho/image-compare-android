@@ -62,18 +62,20 @@ class ImageDetailsView : LinearLayout {
         })
     }
 
-    fun close() {
+    fun close(): Boolean {
 
         val parent = this.parent
 
         if (parent !is ViewGroup) {
-            return
+            return false
         }
 
         parent.removeView(this)
         _overlay?.let {
             parent.removeView(it)
         }
+
+        return true
     }
 
 
