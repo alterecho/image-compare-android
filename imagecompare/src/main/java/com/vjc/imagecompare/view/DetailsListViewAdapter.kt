@@ -10,11 +10,11 @@ import com.vjc.imagecompare.model.MetaData
 
 class DetailsListViewAdapter constructor(ctx: Context) : ArrayAdapter<MetaData>(ctx, 0) {
 
-    var tableData: Array<MetaData>
-    get() = _tableData.toArray(arrayOf())
+    var tableData: List<MetaData>?
+    get() = _tableData
     set(value) {
         _tableData.clear()
-        _tableData.addAll(value)
+        value?.let { _tableData.addAll(it) }
         this.notifyDataSetChanged()
     }
 

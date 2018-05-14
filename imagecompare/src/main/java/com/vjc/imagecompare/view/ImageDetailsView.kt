@@ -12,6 +12,12 @@ import com.vjc.imagecompare.model.MetaData
 
 class ImageDetailsView : LinearLayout {
 
+    var metaData: List<MetaData>?
+        get() = _adapter.tableData
+        set(value) {
+            _adapter.tableData = value
+        }
+
     init {
         val inflater = this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.view_details, this, true)
@@ -19,7 +25,6 @@ class ImageDetailsView : LinearLayout {
 
         _listView = view.findViewById(R.id.listView)
         _adapter = DetailsListViewAdapter(this.context)
-        _adapter.tableData = MetaData.metaDataArray()
         _listView.adapter = _adapter
 
     }

@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import com.vjc.imagecompare.R
 import com.vjc.imagecompare.extensions.center
+import com.vjc.imagecompare.model.MetaData
 import java.util.*
 
 class ImageInspectorFragment constructor() : Fragment() {
@@ -90,6 +91,12 @@ class ImageInspectorFragment constructor() : Fragment() {
         when(requestCode) {
             _REQUEST_CODE_IMAGE_GALLERY -> {
                 _imageInspectorView?.bitmapUri = data?.data
+                var metaData: List<MetaData>? = null
+                data?.let {
+                    val array = MetaData.metaDataArray(it.data, context)
+                    metaData = array.asList()
+                }
+                _imageDetailsView?.metaData = metaData
             }
 
             _REEQUEST_CODE_IMAGE_CAMERA -> {

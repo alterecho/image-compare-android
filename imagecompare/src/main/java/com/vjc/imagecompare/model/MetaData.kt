@@ -1,19 +1,25 @@
 package com.vjc.imagecompare.model
 
+import android.content.Context
 import android.media.ExifInterface
+import android.net.Uri
+import java.io.InputStream
 
 data class MetaData constructor(val name: String, val value: String) {
     companion object {
-
-
-
-        fun metaDataArray(): Array<MetaData> {
+        fun metaDataArray(uri: Uri, ctx: Context): Array<MetaData> {
             val array = arrayListOf<MetaData>()
-            for (i in 0..10) {
 
+            val iStream = ctx.contentResolver.openInputStream(uri)
+            val exifInterface = ExifInterface(iStream)
 
-                for ((key, value) in tags) {
-                    array.add(MetaData(key, value))
+            for ((key, value) in tags) {
+                // value for the given key (from ExifInterface object)
+                val attribValue = exifInterface.getAttribute(key)
+                if (attribValue != null) {
+                    array.add(MetaData(key, attribValue))
+                } else {
+                    array.add(MetaData(key, "-"))
                 }
             }
             return array.toArray(arrayOf())
