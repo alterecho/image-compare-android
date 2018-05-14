@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.*
 import com.vjc.imagecompare.R
 import com.vjc.imagecompare.extensions.center
+import com.vjc.imagecompare.model.MetaData
 
 class ImageDetailsView : LinearLayout {
 
@@ -17,7 +18,9 @@ class ImageDetailsView : LinearLayout {
 //        View.inflate(this.context, R.layout.view_details, this)
 
         _listView = view.findViewById(R.id.listView)
-        _listView.adapter = DetailsListViewAdapter(this.context)
+        _adapter = DetailsListViewAdapter(this.context)
+        _adapter.tableData = MetaData.metaDataArray()
+        _listView.adapter = _adapter
 
     }
 
@@ -53,5 +56,6 @@ class ImageDetailsView : LinearLayout {
 
 
     private val _listView: ListView
+    private val _adapter: DetailsListViewAdapter
 
 }

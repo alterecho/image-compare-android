@@ -5,7 +5,7 @@ data class MetaData constructor(val name: String, val value: String) {
         fun metaDataArray(): Array<MetaData> {
             val array = arrayListOf<MetaData>()
             for (i in 0..10) {
-                array.add(MetaData("meta $1", "value $i"))
+                array.add(MetaData("meta $i", "value $i"))
             }
             return array.toArray(arrayOf())
         }

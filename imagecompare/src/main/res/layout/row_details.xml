@@ -5,6 +5,7 @@
     android:background="#acf">
 
     <TextView
+        android:id="@+id/nameTextView"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:text="detail"
@@ -13,6 +14,7 @@
         />
 
     <TextView
+        android:id="@+id/valueTextView"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginLeft="5dp"
