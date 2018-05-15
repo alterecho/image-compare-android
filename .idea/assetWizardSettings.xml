@@ -45,8 +45,8 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\Vijay\Projects\image-compare-assets\icons\other-icons\ic_clear_white_96.png" />
-                                      <entry key="outputName" value="ic_close" />
+                                      <entry key="imageAsset" value="C:\Users\Vijay\Projects\image-compare-assets\icons\other-icons\icon_add_512.png" />
+                                      <entry key="outputName" value="ic_add" />
                                       <entry key="theme" value="HOLO_DARK" />
                                     </map>
                                   </option>

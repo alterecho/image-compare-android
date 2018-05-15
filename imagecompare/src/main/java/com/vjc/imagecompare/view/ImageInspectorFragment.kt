@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import com.vjc.imagecompare.R
 import com.vjc.imagecompare.extensions.center
 import com.vjc.imagecompare.model.MetaData
@@ -28,21 +29,21 @@ class ImageInspectorFragment constructor() : Fragment() {
 
             _imageInspectorView = it.findViewById<ImageInspectorView>(R.id.imageInspectorView)
 
-            val addButton = it.findViewById<Button>(R.id.addButton)
+            val addButton = it.findViewById<ImageButton>(R.id.addButton)
             addButton.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View?) {
                     addButtonAction()
                 }
             })
 
-            val cameraButton = it.findViewById<Button>(R.id.cameraButton)
+            val cameraButton = it.findViewById<ImageButton>(R.id.cameraButton)
             cameraButton.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View?) {
                     cameraButtonAction()
                 }
             })
 
-            val detailsButton = it.findViewById<Button>(R.id.detailsButton)
+            val detailsButton = it.findViewById<ImageButton>(R.id.detailsButton)
             detailsButton.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View?) {
                     detailsButtonAction();

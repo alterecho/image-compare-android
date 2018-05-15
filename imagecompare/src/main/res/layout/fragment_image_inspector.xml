@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0f0"
     >
     <LinearLayout
         android:id="@+id/toolbarLayout"
@@ -20,10 +19,12 @@
 
         </View>
 
-        <Button
+        <ImageButton
             android:id="@+id/addButton"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:background="@color/theme"
+            android:src="@drawable/ic_add"
         />
 
         <View
@@ -34,10 +35,13 @@
 
         </View>
 
-        <Button
+        <ImageButton
             android:id="@+id/cameraButton"
             android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_height="30dp"
+            android:src="@drawable/ic_camera"
+            android:background="@color/theme"
+            />
 
         <View
             android:layout_width="0dp"
@@ -47,10 +51,13 @@
 
         </View>
 
-        <Button
+        <ImageButton
             android:id="@+id/detailsButton"
             android:layout_width="30dp"
-            android:layout_height="30dp" />
+            android:layout_height="30dp"
+            android:src="@drawable/ic_details"
+            android:background="@color/theme"
+            />
 
         <View
             android:layout_width="0dp"
