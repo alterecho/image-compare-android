@@ -6,7 +6,10 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.PointF
 import android.net.Uri
+import android.os.Bundle
+import android.os.Parcelable
 import android.util.AttributeSet
+import android.util.LruCache
 import android.util.Size
 import android.util.SizeF
 import android.view.GestureDetector
@@ -42,6 +45,59 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
         val fd = pfd.fileDescriptor
         this.bitmap = BitmapFactory.decodeFileDescriptor(fd)
         pfd.close()
+    }
+
+    override fun onSaveInstanceState(): Parcelable {
+        val superPacelable = super.onSaveInstanceState()
+        val bundle = Bundle()
+
+        val bitmap = _imageView.bitmap
+
+        bitmap?.let {
+            bundle.putParcelable(KEY_SUPER_PARCELABLE, superPacelable)
+            bundle.putFloat(KEY_POSITION_X, _imageView.position.x)
+            bundle.putFloat(KEY_POSITION_Y, _imageView.position.y)
+            bundle.putFloat(KEY_SIZE_WIDTH, _imageView.size.width)
+            bundle.putFloat(KEY_SIZE_HEIGHT, _imageView.size.height)
+            bundle.putFloat(KEY_ANGLE, _imageView.rotation)
+
+            _bitmapCache.put(KEY_BITMAP, it)
+        }
+
+        return bundle
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+
+        var state = state
+
+        if (state is Bundle) {
+            val bundle = state as Bundle
+            state = bundle.getParcelable<Parcelable>(KEY_SUPER_PARCELABLE)
+
+            val bitmap = _bitmapCache.get(KEY_BITMAP)
+
+            bitmap?.let {
+                val position = PointF(bundle.getFloat(KEY_POSITION_X, 0.0f), bundle.getFloat(KEY_POSITION_Y, 0.0f))
+                val size = SizeF(bundle.getFloat(KEY_SIZE_WIDTH, 0.0f), bundle.getFloat(KEY_SIZE_HEIGHT, 0.0f))
+                val angle = bundle.getFloat(KEY_ANGLE)
+                _imageView.bitmap = bitmap
+
+                _imageView.position = position
+                _imageView.size = size
+                _imageView.post {
+                    _imageView.position = position
+                    _imageView.rotation = angle
+                }
+            }
+
+
+
+
+        }
+
+        super.onRestoreInstanceState(state)
+
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -168,7 +224,10 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
     /** start size of _imageView when scale scale gesture began */
     private var _startSize = SizeF(0.0f, 0.0f)
 
+    /** for pinch zoom */
     private var _scaleFactor = 1.0f;
+
+
 
 
     init {
@@ -176,4 +235,29 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
         _imageView.setBackgroundColor(Color.RED)
         this.bitmap = null
     }
+
+    companion object {
+        private val _bitmapCache: LruCache<String, Bitmap>
+        init {
+            val availableCache = Runtime.getRuntime().maxMemory().toInt() / 1024
+            _bitmapCache = LruCache(100)
+//            _bitmapCache = object : LruCache<String, Bitmap>(availableCache) {
+//                override fun sizeOf(key: String?, value: Bitmap?): Int {
+//                    value?.let {
+//                        return it.byteCount / 1024
+//                    }
+//                    return 0
+//                }
+//            }
+
+        }
+    }
 }
+
+private const val KEY_SUPER_PARCELABLE = "super.parcelable"
+private const val KEY_BITMAP = "bitmap"
+private const val KEY_POSITION_X = "imageView.position.x"
+private const val KEY_POSITION_Y = "imageView.position.y"
+private const val KEY_SIZE_WIDTH = "imageView.size.width"
+private const val KEY_SIZE_HEIGHT = "imageView.size.height"
+private const val KEY_ANGLE = "imageView.angle"

@@ -96,8 +96,6 @@ class ImageInspectorFragment constructor() : Fragment() {
         } else {
             this.showImageDetailsView()
         }
-
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
