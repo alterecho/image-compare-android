@@ -1,9 +1,13 @@
 package com.vjc.imagecompare.view
 
+import android.app.Activity
 import android.app.Fragment
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.os.StrictMode
 import android.provider.MediaStore
 import android.text.Layout
 import android.view.LayoutInflater
@@ -14,6 +18,7 @@ import android.widget.ImageButton
 import com.vjc.imagecompare.R
 import com.vjc.imagecompare.extensions.center
 import com.vjc.imagecompare.model.MetaData
+import java.io.File
 import java.util.*
 
 class ImageInspectorFragment constructor() : Fragment() {
@@ -71,9 +76,16 @@ class ImageInspectorFragment constructor() : Fragment() {
         _imageDetailsView?.close()
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
+        val dir = context.getExternalFilesDir(null)
+        _tempFile = File.createTempFile("temp", ".jpg", dir)
+        val uri = Uri.fromFile(_tempFile)
 
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
 
-        this.startActivityForResult(intent, com.vjc.imagecompare.view._REEQUEST_CODE_IMAGE_CAMERA)
+        val vmPolicyBuilder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(vmPolicyBuilder.build())
+
+        this.startActivityForResult(intent, com.vjc.imagecompare.view._REQUEST_CODE_IMAGE_CAMERA)
     }
 
     fun detailsButtonAction() {
@@ -91,19 +103,38 @@ class ImageInspectorFragment constructor() : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+
         when(requestCode) {
             _REQUEST_CODE_IMAGE_GALLERY -> {
-                _imageInspectorView?.bitmapUri = data?.data
+
+                var tempUri: Uri? = null
                 var metaData: List<MetaData>? = null
+
                 data?.let {
-                    val array = MetaData.metaDataArray(it.data, context)
-                    metaData = array.asList()
+                    tempUri = it.data
+                    metaData  = MetaData.metaDataArray(it.data, context).asList()
                 }
+
+                _imageInspectorView?.bitmapUri = data?.data
                 _imageDetailsView?.metaData = metaData
             }
+            _REQUEST_CODE_IMAGE_CAMERA -> {
+                var tempUri: Uri? = null
+                var metaData: List<MetaData>? = null
+                _tempFile?.let {
+                    var uri = Uri.fromFile(_tempFile)
+                    tempUri = uri
+                    metaData = MetaData.metaDataArray(uri, context).asList()
 
-            _REEQUEST_CODE_IMAGE_CAMERA -> {
+                    if (!it.delete()) {
 
+                    }
+                }
+                _imageInspectorView?.bitmapUri = tempUri
+                _imageDetailsView?.metaData = metaData
             }
         }
     }
@@ -137,4 +168,7 @@ class ImageInspectorFragment constructor() : Fragment() {
 }
 
 private const val _REQUEST_CODE_IMAGE_GALLERY = 1
-private const val _REEQUEST_CODE_IMAGE_CAMERA = 2
+private const val _REQUEST_CODE_IMAGE_CAMERA = 2
+
+/** to save camera capture */
+private var _tempFile: File? = null
