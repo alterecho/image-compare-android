@@ -127,9 +127,9 @@ class ImageInspectorFragment constructor() : Fragment() {
                     tempUri = uri
                     metaData = MetaData.metaDataArray(uri, context).asList()
 
-                    if (!it.delete()) {
-
-                    }
+//                    if (!it.delete()) {
+//
+//                    }
                 }
                 _imageInspectorView?.bitmapUri = tempUri
                 _imageDetailsView?.metaData = metaData
