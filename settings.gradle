@@ -1,1 +1,1 @@
-include ':app', ':imagecompare', ':resources'
+include ':app', ':kotlin', ':resources'
