@@ -58,24 +58,33 @@ class ImageView constructor(ctx: Context) : ImageView(ctx) {
                 var angle = 0.0f
 
                 when (orientation) {
-                    ExifInterface.ORIENTATION_ROTATE_90 -> {
+                    ExifInterface.ORIENTATION_NORMAL -> {
                         width = bitmap!!.height
                         height = bitmap!!.width
+                        angle = 0.0f
+                    }
+                    ExifInterface.ORIENTATION_ROTATE_90 -> {
+                        width = bitmap!!.width
+                        height = bitmap!!.height
                         angle = 90.0f
                     }
 
                     ExifInterface.ORIENTATION_ROTATE_270 -> {
-                        width = bitmap!!.height
-                        height = bitmap!!.width
+                        width = bitmap!!.width
+                        height = bitmap!!.height
                         angle = 270.0f
                     }
 
                     ExifInterface.ORIENTATION_ROTATE_180 -> {
+                        width = bitmap!!.height
+                        height = bitmap!!.width
                         angle = 180.0f
                     }
 
                     else -> {
-
+                        width = bitmap!!.width
+                        height = bitmap!!.height
+                        angle = 0.0f
                     }
                 }
 

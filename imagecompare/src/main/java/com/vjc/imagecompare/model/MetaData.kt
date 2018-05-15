@@ -4,14 +4,19 @@ import android.content.Context
 import android.media.ExifInterface
 import android.net.Uri
 import java.io.InputStream
+import java.util.concurrent.atomic.AtomicReference
 
 data class MetaData constructor(val name: String, val value: String) {
     companion object {
-        fun metaDataArray(uri: Uri, ctx: Context): Array<MetaData> {
+        fun metaDataArray(uri: Uri, ctx: Context, exifInterfaceRef: AtomicReference<ExifInterface>? = null): Array<MetaData> {
             val array = arrayListOf<MetaData>()
 
             val iStream = ctx.contentResolver.openInputStream(uri)
             val exifInterface = ExifInterface(iStream)
+
+            exifInterfaceRef?.let {
+                exifInterfaceRef.set(exifInterface)
+            }
 
             for ((key, value) in tags) {
                 // value for the given key (from ExifInterface object)

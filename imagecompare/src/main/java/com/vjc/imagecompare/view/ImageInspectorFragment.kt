@@ -5,6 +5,7 @@ import android.app.Fragment
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.os.StrictMode
@@ -20,6 +21,7 @@ import com.vjc.imagecompare.extensions.center
 import com.vjc.imagecompare.model.MetaData
 import java.io.File
 import java.util.*
+import java.util.concurrent.atomic.AtomicReference
 
 class ImageInspectorFragment constructor() : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -110,29 +112,28 @@ class ImageInspectorFragment constructor() : Fragment() {
 
                 var tempUri: Uri? = null
                 var metaData: List<MetaData>? = null
-
+                val exifInterfaceRef = AtomicReference<ExifInterface>()
                 data?.let {
                     tempUri = it.data
-                    metaData  = MetaData.metaDataArray(it.data, context).asList()
+                    metaData  = MetaData.metaDataArray(it.data, context, exifInterfaceRef).asList()
                 }
+                this.setImageUri(tempUri, metaData, exifInterfaceRef.get())
 
-                _imageInspectorView?.setBitmapUri(data?.data, null)
-                _imageDetailsView?.metaData = metaData
             }
             _REQUEST_CODE_IMAGE_CAMERA -> {
                 var tempUri: Uri? = null
                 var metaData: List<MetaData>? = null
+                val exifInterfaceRef = AtomicReference<ExifInterface>()
                 _tempFile?.let {
                     var uri = Uri.fromFile(_tempFile)
                     tempUri = uri
-                    metaData = MetaData.metaDataArray(uri, context).asList()
+                    metaData = MetaData.metaDataArray(uri, context, exifInterfaceRef).asList()
 
 //                    if (!it.delete()) {
 //
 //                    }
                 }
-                _imageInspectorView?.setBitmapUri(tempUri, null)
-                _imageDetailsView?.metaData = metaData
+                this.setImageUri(tempUri, metaData, exifInterfaceRef.get())
             }
         }
     }
@@ -162,6 +163,11 @@ class ImageInspectorFragment constructor() : Fragment() {
 
     private fun hideImageDetailsView() {
         _imageDetailsView?.close()
+    }
+
+    private fun setImageUri(uri: Uri?, metaDataList: List<MetaData>?, exifInterface: ExifInterface?) {
+        _imageInspectorView?.setBitmapUri(uri, exifInterface)
+        _imageDetailsView?.metaData = metaDataList
     }
 }
 
