@@ -2,10 +2,12 @@ package com.vjc.imagecompare.view
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.graphics.PointF
 import android.graphics.drawable.BitmapDrawable
 import android.media.ExifInterface
+import android.net.Uri
 import android.util.Size
 import android.util.SizeF
 import android.view.ViewGroup
@@ -104,6 +106,19 @@ class ImageView constructor(ctx: Context) : ImageView(ctx) {
         }
         this.requestLayout()
 
+    }
+
+    fun setBitmap(uri: Uri?, exifInterface: ExifInterface? = null) {
+        var bitmap: Bitmap? = null
+
+        uri?.let {
+            val pfd = this.context.contentResolver.openFileDescriptor(it, "r")
+            val fd = pfd.fileDescriptor
+            bitmap = BitmapFactory.decodeFileDescriptor(fd)
+            pfd.close()
+        }
+
+        this.setBitmap(bitmap, exifInterface)
     }
 
     /** switches the _imageView size between the size of bitmap and size that fits in view */
