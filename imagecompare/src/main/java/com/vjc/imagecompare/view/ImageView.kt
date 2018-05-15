@@ -2,8 +2,10 @@ package com.vjc.imagecompare.view
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.graphics.PointF
 import android.graphics.drawable.BitmapDrawable
+import android.media.ExifInterface
 import android.util.Size
 import android.util.SizeF
 import android.view.ViewGroup
@@ -12,18 +14,10 @@ import com.vjc.imagecompare.extensions.center
 
 class ImageView constructor(ctx: Context) : ImageView(ctx) {
 
-    public var bitmap: Bitmap? = null
-        get() = (this.drawable as BitmapDrawable).bitmap
+    public var bitmap: Bitmap?
+        get() = if (this.drawable != null) (this.drawable as BitmapDrawable).bitmap else null
         set(value){
-            field = value
-            this.setImageBitmap(field)
-            this.layoutParams.width = 0
-            this.layoutParams.height = 0
-            field?.let {
-                this.layoutParams.width = it.width
-                this.layoutParams.height = it.height
-            }
-            this.requestLayout()
+            this.setBitmap(value, null)
         }
 
     var position
@@ -50,6 +44,58 @@ class ImageView constructor(ctx: Context) : ImageView(ctx) {
 //    fun center() {
 //
 //    }
+
+
+    /** sets the bitmap by applying rotation based on the orientation in the ExifInterface */
+    fun setBitmap(bitmap: Bitmap?, exifInterface: ExifInterface?) {
+        var bitmap = bitmap
+
+        if (bitmap != null) {
+            exifInterface?.let {
+                var orientation = it.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+                var width = bitmap!!.width
+                var height = bitmap!!.height
+                var angle = 0.0f
+
+                when (orientation) {
+                    ExifInterface.ORIENTATION_ROTATE_90 -> {
+                        width = bitmap!!.height
+                        height = bitmap!!.width
+                        angle = 90.0f
+                    }
+
+                    ExifInterface.ORIENTATION_ROTATE_270 -> {
+                        width = bitmap!!.height
+                        height = bitmap!!.width
+                        angle = 270.0f
+                    }
+
+                    ExifInterface.ORIENTATION_ROTATE_180 -> {
+                        angle = 180.0f
+                    }
+
+                    else -> {
+
+                    }
+                }
+
+                val matrix = Matrix()
+                matrix.setRotate(angle)
+                bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true)
+
+            }
+        }
+
+        this.setImageBitmap(bitmap)
+        this.layoutParams.width = 0
+        this.layoutParams.height = 0
+        bitmap?.let {
+            this.layoutParams.width = it.width
+            this.layoutParams.height = it.height
+        }
+        this.requestLayout()
+
+    }
 
     /** switches the _imageView size between the size of bitmap and size that fits in view */
     fun toggleImageSize() {

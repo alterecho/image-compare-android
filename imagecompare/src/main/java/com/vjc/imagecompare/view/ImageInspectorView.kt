@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.PointF
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
@@ -27,24 +28,29 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
 
     constructor(ctx: Context, attrs: AttributeSet) : super(ctx, attrs)
 
-    var bitmap: Bitmap?
-        get() = _imageView.bitmap
+//    var bitmap: Bitmap?
+//        get() = _imageView.bitmap
+//
+//        set(value) {
+//            _imageView.bitmap = value
+//            _imageView.reset()
+//        }
 
-        set(value) {
-            _imageView.bitmap = value
-            _imageView.reset()
+//    fun setBitmap(bitmap: Bitmap?, exifInterface: ExifInterface?) {
+//        _imageView.setBitmap(bitmap, exifInterface)
+//    }
+
+    fun setBitmapUri(uri: Uri?, exifInterface: ExifInterface? = null) {
+        var bitmap: Bitmap? = null
+
+        uri?.let {
+            val pfd = this.context.contentResolver.openFileDescriptor(it, "r")
+            val fd = pfd.fileDescriptor
+            bitmap = BitmapFactory.decodeFileDescriptor(fd)
+            pfd.close()
         }
 
-    var bitmapUri: Uri? = null
-    set(value) {
-        field = value
-        if (value != null) {
-
-        }
-        val pfd = this.context.contentResolver.openFileDescriptor(value, "r")
-        val fd = pfd.fileDescriptor
-        this.bitmap = BitmapFactory.decodeFileDescriptor(fd)
-        pfd.close()
+        _imageView.setBitmap(bitmap, exifInterface)
     }
 
     override fun onSaveInstanceState(): Parcelable {
@@ -233,7 +239,7 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
     init {
         this.addView(_imageView)
         _imageView.setBackgroundColor(Color.RED)
-        this.bitmap = null
+        _imageView.setBitmap(null, null)
     }
 
     companion object {

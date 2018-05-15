@@ -116,7 +116,7 @@ class ImageInspectorFragment constructor() : Fragment() {
                     metaData  = MetaData.metaDataArray(it.data, context).asList()
                 }
 
-                _imageInspectorView?.bitmapUri = data?.data
+                _imageInspectorView?.setBitmapUri(data?.data, null)
                 _imageDetailsView?.metaData = metaData
             }
             _REQUEST_CODE_IMAGE_CAMERA -> {
@@ -131,7 +131,7 @@ class ImageInspectorFragment constructor() : Fragment() {
 //
 //                    }
                 }
-                _imageInspectorView?.bitmapUri = tempUri
+                _imageInspectorView?.setBitmapUri(tempUri, null)
                 _imageDetailsView?.metaData = metaData
             }
         }
