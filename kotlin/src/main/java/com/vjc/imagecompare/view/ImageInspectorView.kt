@@ -88,9 +88,10 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        _gestureDetector.onTouchEvent(event)
+        if (_gestureDetector.onTouchEvent(event)) { return true }
+        if (_scaleGestureDetector.onTouchEvent(event)) {  }
         if (_rotationGestureDetector.onTouchEvent(event)) { return true }
-//        if (_scaleGestureDetector.onTouchEvent(event)) { return true }
+
 
         event?.let {
             var p1 = PointF(it.x, it.y);
@@ -101,10 +102,7 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
                     _touchPoint_down = p1
                     _touchPoint_offset = p1.bySubtracting(_imageView.position)
 
-//                    return true
-                }
-
-                MotionEvent.ACTION_POINTER_DOWN -> {
+                    return true
                 }
 
                 MotionEvent.ACTION_MOVE -> {
@@ -168,7 +166,6 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
     private val _gestureDetector: GestureDetector = GestureDetector(this.context, object : GestureDetector.SimpleOnGestureListener() {
         //TODO: move all gestures to a single SimpleOnGestureDetector
         override fun onDoubleTap(e: MotionEvent?): Boolean {
-            _imageView.toggleImageSize()
             _imageView.post(object : Runnable {
                 override fun run() {
                     _imageView.reset()

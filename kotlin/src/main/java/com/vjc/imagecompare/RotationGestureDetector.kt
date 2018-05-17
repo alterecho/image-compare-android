@@ -61,7 +61,6 @@ class RotationGestureDetector {
                 MotionEvent.ACTION_DOWN -> {
                     _pointer1 = Pointer(event)
 
-                    return true
                 }
 
                 MotionEvent.ACTION_POINTER_DOWN -> {
@@ -73,8 +72,8 @@ class RotationGestureDetector {
                     println("startangle set to $_startAngle (between $p2, $p1)")
                     _delegateRef?.get()?.onRotationBegin(this)
 
-
-                    return true
+                    _gestureConfirmed = true
+                    return _gestureConfirmed
                 }
 
                 MotionEvent.ACTION_MOVE -> {
@@ -84,7 +83,7 @@ class RotationGestureDetector {
 //                        println("angle: ${Math.toDegrees(angle.toDouble())}, startAngle: ${Math.toDegrees(_startAngle.toDouble())}, change: ${_rotation}")
 
                         _delegateRef?.get()?.onRotationChanged(this)
-                        return true
+                        return _gestureConfirmed
 
                     } else {
 
@@ -94,11 +93,14 @@ class RotationGestureDetector {
 
                 MotionEvent.ACTION_POINTER_UP -> {
                     _pointer2 = null
+                    return _gestureConfirmed
                 }
 
                 MotionEvent.ACTION_UP -> {
                     _pointer1 = null
                     _delegateRef?.get()?.onRotationEnd(this)
+                    _gestureConfirmed = false
+//                    return _gestureConfirmed
                 }
 
                 MotionEvent.ACTION_CANCEL -> {
@@ -106,6 +108,8 @@ class RotationGestureDetector {
                     _pointer2 = null
 
                     _delegateRef?.get()?.onRotationEnd(this)
+
+                    _gestureConfirmed = false
                 }
 
                 else -> {
@@ -130,4 +134,7 @@ class RotationGestureDetector {
 
     /** backing for 'delegate' */
     private var _delegateRef: WeakReference<OnRotationGestureListener>? = null
+
+    /** if the gesture is consumed */
+    private var _gestureConfirmed = false
 }
