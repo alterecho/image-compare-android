@@ -52,7 +52,13 @@ class Pointer constructor(motionEvent: MotionEvent) {
         set(value) {
             _motionEvent = value
             _index = field.findPointerIndex(_ID)
-            _point = PointF(_motionEvent.getX(_index), _motionEvent.getY(_index))
+            println(this)
+            if (_index < 0) {
+                _point = PointF()
+            } else {
+                _point = PointF(_motionEvent.getX(_index), _motionEvent.getY(_index))
+            }
+
         }
 
 }
