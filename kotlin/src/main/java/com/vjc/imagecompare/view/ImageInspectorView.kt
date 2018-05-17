@@ -17,11 +17,12 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.widget.FrameLayout
+import com.vjc.imagecompare.RotationGestureDetector
 import com.vjc.imagecompare.extensions.*
 import com.vjc.imagecompare.model.Pointer
 import kotlin.math.atan2
 
-class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListener {
+class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListener, RotationGestureDetector.OnRotationGestureListener {
 
     constructor(ctx: Context) : super(ctx) {
     }
@@ -87,61 +88,35 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        _gestureDetector.onTouchEvent(event)
-        if (_scaleGestureDetector.onTouchEvent(event)) {
-//            return true
-        }
+
+//        _gestureDetector.onTouchEvent(event)
+//        if (_scaleGestureDetector.onTouchEvent(event)) { return true }
+        return _rotationGestureDetector.onTouchEvent(event)
 
         event?.let {
-            val p = PointF(it.x, it.y);
-            var p2: PointF
+            var p1 = PointF(it.x, it.y);
             var angle = 0.0f
-            val pointer2 = _pointer2
-            if (pointer2 != null) {
-                p2 = pointer2.point(event)
-                angle = atan2(p2.y - _imageView.position.y, p2.x - _imageView.position.x)
-            }
-
-            val pointer = Pointer(it)
 
             when (it.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
-                    _touchPoint_down = p
-                    _touchPoint_offset = p.bySubtracting(_imageView.position)
-
-                    _pointer1 = pointer
+                    _touchPoint_down = p1
+                    _touchPoint_offset = p1.bySubtracting(_imageView.position)
 
                     return true
                 }
 
                 MotionEvent.ACTION_POINTER_DOWN -> {
-                    _pointer2 = pointer
-                    _startAngle_imageView = _imageView.rotation
-                    _startAngle = angle
-
-                    return true
                 }
 
                 MotionEvent.ACTION_MOVE -> {
-                    if (pointer.id == pointer.id) {
-                        _imageView.position = p.bySubtracting(_touchPoint_offset)
-                    } else {
-
-                    }
-
-                    if (pointer2 != null) {
-                        _imageView.rotation = _startAngle_imageView + Math.toDegrees((angle - _startAngle).toDouble()).toFloat();
-                    }
-
+                    _imageView.position = p1.bySubtracting(_touchPoint_offset)
                 }
 
                 MotionEvent.ACTION_POINTER_UP -> {
-                    _pointer2 = null
                 }
 
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     _touchPoint_offset = PointF()
-                    _pointer1 = null
                 }
             }
         }
@@ -173,6 +148,17 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
     }
 
 
+    override fun onRotationBegin(detector: RotationGestureDetector) {
+        _startAngle_imageView = _imageView.rotation
+    }
+
+    override fun onRotationChanged(detector: RotationGestureDetector) {
+    _imageView.rotation = _startAngle_imageView + detector.rotation
+    }
+
+    override fun onRotationEnd(detector: RotationGestureDetector) {
+        _startAngle_imageView = 0.0f
+    }
 
 
 
@@ -193,16 +179,11 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
         }
     })
 
+    private val _rotationGestureDetector: RotationGestureDetector = RotationGestureDetector()
+
     private var _touchPoint_down = PointF(0.0f, 0.0f)
     /** difference between where the the touch began and where _imageView position (center) */
     private var _touchPoint_offset = PointF()
-
-    /** touch identifier for first and second touch (to differentiate movement and rotation) */
-    private var _pointer1: Pointer? = null
-    private var _pointer2: Pointer? = null
-
-    /** the angle w.r.t _imageView position (center), when the rotation starts */
-    private var _startAngle = 0.0f
 
     /** the angle of the _imageView when thr rotation starts */
     private var _startAngle_imageView = 0.0f
