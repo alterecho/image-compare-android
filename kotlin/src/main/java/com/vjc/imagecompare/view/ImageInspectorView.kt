@@ -90,7 +90,7 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         _gestureDetector.onTouchEvent(event)
         if (_rotationGestureDetector.onTouchEvent(event)) { return true }
-        if (_scaleGestureDetector.onTouchEvent(event)) { return true }
+//        if (_scaleGestureDetector.onTouchEvent(event)) { return true }
 
         event?.let {
             var p1 = PointF(it.x, it.y);
@@ -101,7 +101,7 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
                     _touchPoint_down = p1
                     _touchPoint_offset = p1.bySubtracting(_imageView.position)
 
-                    return true
+//                    return true
                 }
 
                 MotionEvent.ACTION_POINTER_DOWN -> {
@@ -200,6 +200,8 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
         this.addView(_imageView)
         _imageView.setBackgroundColor(Color.RED)
         _imageView.setBitmap(uri = null, exifInterface = null)
+
+        _rotationGestureDetector.delegate = this
     }
 
     companion object {
