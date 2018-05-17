@@ -30,8 +30,8 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
     constructor(ctx: Context, attrs: AttributeSet) : super(ctx, attrs)
 
 
-    fun setBitmapUri(uri: Uri?, exifInterface: ExifInterface? = null) {
-        _imageView.setBitmap(uri, exifInterface)
+    fun setBitmapUri(uri: Uri?) {
+        _imageView.setBitmap(uri)
     }
 
     override fun onSaveInstanceState(): Parcelable {
@@ -196,7 +196,7 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
     init {
         this.addView(_imageView)
         _imageView.setBackgroundColor(Color.RED)
-        _imageView.setBitmap(uri = null, exifInterface = null)
+        _imageView.setBitmap(uri = null)
 
         _rotationGestureDetector.delegate = this
     }

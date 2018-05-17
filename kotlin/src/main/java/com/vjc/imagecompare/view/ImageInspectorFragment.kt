@@ -112,12 +112,10 @@ class ImageInspectorFragment constructor() : Fragment() {
 
                 var tempUri: Uri? = null
                 var metaData: List<MetaData>? = null
-                val exifInterfaceRef = AtomicReference<ExifInterface>()
                 data?.let {
                     tempUri = it.data
-                    metaData  = MetaData.metaDataArray(it.data, context, exifInterfaceRef).asList()
                 }
-                this.setImageUri(tempUri, metaData, exifInterfaceRef.get())
+                this.setImageUri(tempUri, metaData)
 
             }
             _REQUEST_CODE_IMAGE_CAMERA -> {
@@ -127,13 +125,13 @@ class ImageInspectorFragment constructor() : Fragment() {
                 _tempFile?.let {
                     var uri = Uri.fromFile(_tempFile)
                     tempUri = uri
-                    metaData = MetaData.metaDataArray(uri, context, exifInterfaceRef).asList()
+
 
 //                    if (!it.delete()) {
 //
 //                    }
                 }
-                this.setImageUri(tempUri, metaData, exifInterfaceRef.get())
+                this.setImageUri(tempUri, metaData)
             }
         }
     }
@@ -165,8 +163,8 @@ class ImageInspectorFragment constructor() : Fragment() {
         _imageDetailsView?.close()
     }
 
-    private fun setImageUri(uri: Uri?, metaDataList: List<MetaData>?, exifInterface: ExifInterface?) {
-        _imageInspectorView?.setBitmapUri(uri, exifInterface)
+    private fun setImageUri(uri: Uri?, metaDataList: List<MetaData>?) {
+        _imageInspectorView?.setBitmapUri(uri)
         _imageDetailsView?.metaData = metaDataList
     }
 }

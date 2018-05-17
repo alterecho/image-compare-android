@@ -14,6 +14,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import com.vjc.imagecompare.extensions.center
+import com.vjc.imagecompare.model.MetaData
+import java.util.concurrent.atomic.AtomicReference
 
 class ImageView constructor(ctx: Context) : ImageView(ctx) {
 
@@ -33,6 +35,9 @@ class ImageView constructor(ctx: Context) : ImageView(ctx) {
             this.y = p.y
 
         }
+
+    val metaDataList: List<MetaData>?
+        get() = _metaDataList
 
     var size: SizeF
     get() = SizeF(this.width.toFloat(), this.height.toFloat())
@@ -97,7 +102,7 @@ class ImageView constructor(ctx: Context) : ImageView(ctx) {
                 try {
                     bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true)
                 } catch (e: Exception) {
-                    val toast = Toast.makeText(this.context, "Unable to load image", 5)
+                    val toast = Toast.makeText(this.context, "Unable to load image", Toast.LENGTH_LONG)
                     toast.show()
                 }
 
@@ -115,17 +120,19 @@ class ImageView constructor(ctx: Context) : ImageView(ctx) {
 
     }
 
-    fun setBitmap(uri: Uri?, exifInterface: ExifInterface? = null) {
+    fun setBitmap(uri: Uri?) {
         var bitmap: Bitmap? = null
 
+        val exifInterfaceRef = AtomicReference<ExifInterface>()
         uri?.let {
+            _metaDataList = MetaData.metaDataArray(it, context, exifInterfaceRef).asList()
             val pfd = this.context.contentResolver.openFileDescriptor(it, "r")
             val fd = pfd.fileDescriptor
             bitmap = BitmapFactory.decodeFileDescriptor(fd)
             pfd.close()
         }
 
-        this.setBitmap(bitmap, exifInterface)
+        this.setBitmap(bitmap, exifInterfaceRef.get())
     }
 
     /** switches the _imageView size between the size of bitmap and size that fits in view */
@@ -152,6 +159,8 @@ class ImageView constructor(ctx: Context) : ImageView(ctx) {
         this.center()
         this.rotation = 0.0f
     }
+
+    private var _metaDataList: List<MetaData>? = null
 
     /** returns a point that will restrict the ImageView(this) from moving out of screen */
     private fun getCorrectedPosition(point: PointF): PointF {

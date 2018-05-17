@@ -18,6 +18,7 @@ class ImageDetailsView : LinearLayout {
         get() = _adapter.tableData
         set(value) {
             _adapter.tableData = value
+            _listView.requestLayout()
         }
 
     init {
