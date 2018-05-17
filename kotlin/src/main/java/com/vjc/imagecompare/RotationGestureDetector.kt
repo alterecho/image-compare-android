@@ -61,7 +61,7 @@ class RotationGestureDetector {
                 MotionEvent.ACTION_DOWN -> {
                     _pointer1 = Pointer(event)
 
-                    return true
+//                    return false
                 }
 
                 MotionEvent.ACTION_POINTER_DOWN -> {

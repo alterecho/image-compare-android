@@ -12,6 +12,7 @@ import android.util.Size
 import android.util.SizeF
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import com.vjc.imagecompare.extensions.center
 
 class ImageView constructor(ctx: Context) : ImageView(ctx) {
@@ -92,7 +93,13 @@ class ImageView constructor(ctx: Context) : ImageView(ctx) {
 
                 val matrix = Matrix()
                 matrix.setRotate(angle)
-                bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true)
+
+                try {
+                    bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true)
+                } catch (e: Exception) {
+                    val toast = Toast.makeText(this.context, "Unable to load image", 5)
+                    toast.show()
+                }
 
             }
         }

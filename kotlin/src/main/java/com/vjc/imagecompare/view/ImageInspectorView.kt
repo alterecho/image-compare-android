@@ -88,10 +88,9 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-
-//        _gestureDetector.onTouchEvent(event)
-//        if (_scaleGestureDetector.onTouchEvent(event)) { return true }
-        return _rotationGestureDetector.onTouchEvent(event)
+        _gestureDetector.onTouchEvent(event)
+        if (_rotationGestureDetector.onTouchEvent(event)) { return true }
+        if (_scaleGestureDetector.onTouchEvent(event)) { return true }
 
         event?.let {
             var p1 = PointF(it.x, it.y);
