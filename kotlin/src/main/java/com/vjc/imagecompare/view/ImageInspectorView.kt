@@ -19,6 +19,7 @@ import android.view.ScaleGestureDetector
 import android.widget.FrameLayout
 import com.vjc.imagecompare.RotationGestureDetector
 import com.vjc.imagecompare.extensions.*
+import com.vjc.imagecompare.model.MetaData
 import com.vjc.imagecompare.model.Pointer
 import kotlin.math.atan2
 
@@ -33,6 +34,9 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
     fun setBitmapUri(uri: Uri?) {
         _imageView.setBitmap(uri)
     }
+
+    val metaDataList: List<MetaData>?
+        get() = _imageView.metaDataList
 
     override fun onSaveInstanceState(): Parcelable {
         val superPacelable = super.onSaveInstanceState()

@@ -111,17 +111,14 @@ class ImageInspectorFragment constructor() : Fragment() {
             _REQUEST_CODE_IMAGE_GALLERY -> {
 
                 var tempUri: Uri? = null
-                var metaData: List<MetaData>? = null
                 data?.let {
                     tempUri = it.data
                 }
-                this.setImageUri(tempUri, metaData)
+                this.setImageUri(tempUri)
 
             }
             _REQUEST_CODE_IMAGE_CAMERA -> {
                 var tempUri: Uri? = null
-                var metaData: List<MetaData>? = null
-                val exifInterfaceRef = AtomicReference<ExifInterface>()
                 _tempFile?.let {
                     var uri = Uri.fromFile(_tempFile)
                     tempUri = uri
@@ -131,7 +128,7 @@ class ImageInspectorFragment constructor() : Fragment() {
 //
 //                    }
                 }
-                this.setImageUri(tempUri, metaData)
+                this.setImageUri(tempUri)
             }
         }
     }
@@ -153,7 +150,9 @@ class ImageInspectorFragment constructor() : Fragment() {
             _imageDetailsView = ImageDetailsView(this.context)
         }
 
+        /// show the details view as the child of inspector view
         if (_imageInspectorView != null) {
+            _imageDetailsView?.metaDataList = _imageInspectorView?.metaDataList
             _imageDetailsView!!.showIn(_imageInspectorView!!)
         }
 
@@ -163,9 +162,9 @@ class ImageInspectorFragment constructor() : Fragment() {
         _imageDetailsView?.close()
     }
 
-    private fun setImageUri(uri: Uri?, metaDataList: List<MetaData>?) {
+    private fun setImageUri(uri: Uri?) {
         _imageInspectorView?.setBitmapUri(uri)
-        _imageDetailsView?.metaData = metaDataList
+        _imageDetailsView?.metaDataList = _imageDetailsView?.metaDataList
     }
 }
 

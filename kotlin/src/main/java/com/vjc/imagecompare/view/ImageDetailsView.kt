@@ -14,7 +14,7 @@ import com.vjc.imagecompare.model.MetaData
 
 class ImageDetailsView : LinearLayout {
 
-    var metaData: List<MetaData>?
+    var metaDataList: List<MetaData>?
         get() = _adapter.tableData
         set(value) {
             _adapter.tableData = value
