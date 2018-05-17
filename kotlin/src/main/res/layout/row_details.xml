@@ -2,23 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#acf">
+    >
 
+    <!--metadata title-->
     <TextView
         android:id="@+id/nameTextView"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:text="detail"
+        android:textColor="@android:color/darker_gray"
         android:textAlignment="textEnd"
         android:layout_weight="1"
         />
 
+    <!--metadata value-->
     <TextView
         android:id="@+id/valueTextView"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginLeft="5dp"
         android:layout_weight="1"
+        android:textColor="@android:color/white"
         android:text="value"
         android:textAlignment="textStart" />
 
