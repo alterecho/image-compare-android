@@ -4,18 +4,55 @@ import android.graphics.Point
 import android.graphics.PointF
 import android.view.MotionEvent
 
-data class Pointer constructor(val index: Int, val id: Int) {
+/** An abstraction of the concept of pointers for multi-touch.
+ * 'id' is set initially based on the MotionEvenet passed in the constructor.
+ * Updates the index when the associated MotionEvent is update (using the 'motionEvent' property. Gets the index based on the initially set ID).
+ */
+class Pointer constructor(motionEvent: MotionEvent) {
 
-    constructor(event: MotionEvent) : this(event.actionIndex, event.getPointerId(event.actionIndex))
+    val point: PointF
+        get() = _point
 
-    fun point(event: MotionEvent): PointF = PointF(event.getX(index), event.getY(index))
+    val ID: Int
+        get() = _ID
 
     override fun equals(other: Any?): Boolean {
         (other as? Pointer)?.let {
-            return  other.id == this.id
+            return  other.ID == _ID
         }
         return false
     }
 
-    override fun toString(): String = "id: $id, index: $index"
+    fun equals(event: MotionEvent): Boolean {
+        val index = event.actionIndex
+        val id = event.getPointerId(index)
+        if (id == _ID) {
+            return true
+        }
+        return false
+    }
+
+    override fun toString(): String = "id: $_ID, index: $_index, point:$_point"
+    var _index: Int = -1
+    val _ID: Int
+
+
+    private var _motionEvent: MotionEvent
+    private var _point: PointF
+
+    init {
+        _motionEvent = motionEvent
+        _index = motionEvent.actionIndex
+        _ID = motionEvent.getPointerId(_index)
+        _point = PointF(motionEvent.getX(_index), motionEvent.getY(_index))
+    }
+
+    var motionEvent: MotionEvent = _motionEvent
+        get() = _motionEvent
+        set(value) {
+            _motionEvent = value
+            _index = field.findPointerIndex(_ID)
+            _point = PointF(_motionEvent.getX(_index), _motionEvent.getY(_index))
+        }
+
 }
