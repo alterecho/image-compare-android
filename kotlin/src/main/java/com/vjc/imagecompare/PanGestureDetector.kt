@@ -45,6 +45,10 @@ class PanGestureDetector {
                 MotionEvent.ACTION_UP -> {
                     _delegateRef?.get()?.touchEnd(this)
                 }
+
+                else -> {
+                    
+                }
             }
         }
         return false
