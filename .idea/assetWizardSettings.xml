@@ -63,7 +63,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="68" />
+                                                <entry key="scalingPercent" value="69" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -75,20 +75,15 @@
                                     <map>
                                       <entry key="backgroundColor" value="000000" />
                                       <entry key="backgroundLayerName" value="ic_launcher_background" />
-                                      <entry key="foregroundImage" value="C:\Users\Vijay\Projects\image-compare-assets\icons\other-icons\ic_add_white_96.png" />
+                                      <entry key="foregroundImage" value="C:\Users\Vijay\Projects\image-compare-assets\icons\app-icon\new\image-compare_app-icon_512.png" />
                                       <entry key="foregroundLayerName" value="ic_launcher_foreground" />
-                                      <entry key="outputName" value="" />
+                                      <entry key="outputName" value="icn_app" />
                                       <entry key="previewDensity" value="HIGH" />
                                     </map>
                                   </option>
                                 </PersistentState>
                               </value>
                             </entry>
-                          </map>
-                        </option>
-                        <option name="values">
-                          <map>
-                            <entry key="outputIconType" value="ACTIONBAR" />
                           </map>
                         </option>
                       </PersistentState>
