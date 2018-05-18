@@ -8,9 +8,9 @@ import java.lang.ref.WeakReference
 class PanGestureDetector {
 
     interface Listener {
-        fun touchBegin(gesture: PanGestureDetector)
-        fun touchMove(gesture: PanGestureDetector)
-        fun touchEnd(gesture: PanGestureDetector)
+        fun panBegin(gesture: PanGestureDetector)
+        fun panMove(gesture: PanGestureDetector)
+        fun panEnd(gesture: PanGestureDetector)
     }
 
     var delegate: Listener?
@@ -30,7 +30,7 @@ class PanGestureDetector {
             when (it.action) {
                 MotionEvent.ACTION_DOWN -> {
                     _pnt_begin = PointF(_loc.x, _loc.y)
-                    _delegateRef?.get()?.touchBegin(this)
+                    _delegateRef?.get()?.panBegin(this)
                     return true
                 }
 
@@ -40,12 +40,12 @@ class PanGestureDetector {
 
                 MotionEvent.ACTION_MOVE -> {
                     _vec = Vec2(_pnt_begin.x - _loc.x, _loc.y - _pnt_begin.y)
-                    _delegateRef?.get()?.touchMove(this)
+                    _delegateRef?.get()?.panMove(this)
                     return true
                 }
 
                 MotionEvent.ACTION_UP -> {
-                    _delegateRef?.get()?.touchEnd(this)
+                    _delegateRef?.get()?.panEnd(this)
                     _pnt_begin = PointF()
                     _vec = Vec2()
                 }
