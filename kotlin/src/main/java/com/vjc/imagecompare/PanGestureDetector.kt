@@ -29,7 +29,7 @@ class PanGestureDetector {
 
             when (it.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    _delegateRef?.get().touchBegin(this)
+                    _delegateRef?.get()?.touchBegin(this)
                     return true
                 }
 
@@ -38,12 +38,12 @@ class PanGestureDetector {
                 }
 
                 MotionEvent.ACTION_MOVE -> {
-                    _delegateRef?.get().touchMove(this)
+                    _delegateRef?.get()?.touchMove(this)
                     return true
                 }
 
                 MotionEvent.ACTION_UP -> {
-                    _delegateRef?.get().touchEnd(this)
+                    _delegateRef?.get()?.touchEnd(this)
                 }
             }
         }
