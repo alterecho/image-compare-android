@@ -29,6 +29,7 @@ class PanGestureDetector {
 
             when (it.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    _pnt_begin = PointF(_loc.x, _loc.y)
                     _delegateRef?.get()?.touchBegin(this)
                     return true
                 }
@@ -38,16 +39,24 @@ class PanGestureDetector {
                 }
 
                 MotionEvent.ACTION_MOVE -> {
+                    _vec = Vec2(_pnt_begin.x - _loc.x, _loc.y - _pnt_begin.y)
                     _delegateRef?.get()?.touchMove(this)
                     return true
                 }
 
                 MotionEvent.ACTION_UP -> {
                     _delegateRef?.get()?.touchEnd(this)
+                    _pnt_begin = PointF()
+                    _vec = Vec2()
+                }
+
+                MotionEvent.ACTION_CANCEL -> {
+                    _pnt_begin = PointF()
+                    _vec = Vec2()
                 }
 
                 else -> {
-                    
+
                 }
             }
         }
@@ -58,4 +67,7 @@ class PanGestureDetector {
     private var _loc: PointF = PointF()
     private var _vec: Vec2 = Vec2()
     private var _delegateRef: WeakReference<Listener>? = null
+
+    /** point where 1st touch began */
+    private var _pnt_begin = PointF()
 }
