@@ -17,13 +17,14 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.widget.FrameLayout
+import com.vjc.imagecompare.PanGestureDetector
 import com.vjc.imagecompare.RotationGestureDetector
 import com.vjc.imagecompare.extensions.*
 import com.vjc.imagecompare.model.MetaData
 import com.vjc.imagecompare.model.Pointer
 import kotlin.math.atan2
 
-class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListener, RotationGestureDetector.OnRotationGestureListener {
+class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListener, RotationGestureDetector.OnRotationGestureListener, PanGestureDetector.Listener {
 
     constructor(ctx: Context) : super(ctx) {
     }
@@ -93,37 +94,51 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (_gestureDetector.onTouchEvent(event)) { return true }
+        if (_panGestureDetector.onTouchEvent(event)) { return true }
         if (_scaleGestureDetector.onTouchEvent(event)) {  }
         if (_rotationGestureDetector.onTouchEvent(event)) { return true }
 
 
-        event?.let {
-            var p1 = PointF(it.x, it.y);
-            var angle = 0.0f
-
-            when (it.actionMasked) {
-                MotionEvent.ACTION_DOWN -> {
-                    _touchPoint_down = p1
-                    _touchPoint_offset = p1.bySubtracting(_imageView.position)
-
-                    return true
-                }
-
-                MotionEvent.ACTION_MOVE -> {
-                    _imageView.position = p1.bySubtracting(_touchPoint_offset)
-                }
-
-                MotionEvent.ACTION_POINTER_UP -> {
-                }
-
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    _touchPoint_offset = PointF()
-                }
-            }
-        }
+//        event?.let {
+//            var p1 = PointF(it.x, it.y);
+//            var angle = 0.0f
+//
+//            when (it.actionMasked) {
+//                MotionEvent.ACTION_DOWN -> {
+//                    _touchPoint_down = p1
+//                    _touchPoint_offset = p1.bySubtracting(_imageView.position)
+//
+//                    return true
+//                }
+//
+//                MotionEvent.ACTION_MOVE -> {
+//                    _imageView.position = p1.bySubtracting(_touchPoint_offset)
+//                }
+//
+//                MotionEvent.ACTION_POINTER_UP -> {
+//                }
+//
+//                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+//                    _touchPoint_offset = PointF()
+//                }
+//            }
+//        }
 
         return false
     }
+
+    override fun panBegin(gesture: PanGestureDetector) {
+        _imageView_pos_initial = _imageView.position
+    }
+
+    override fun panMove(gesture: PanGestureDetector) {
+        _imageView.position = _imageView_pos_initial.byAdding(PointF(gesture.vector.x, gesture.vector.y))
+    }
+
+    override fun panEnd(gesture: PanGestureDetector) {
+
+    }
+
 
     override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
         _startSize = SizeF(_imageView.width.toFloat(), _imageView.height.toFloat())
@@ -181,9 +196,13 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
 
     private val _rotationGestureDetector: RotationGestureDetector = RotationGestureDetector()
 
+    private val _panGestureDetector: PanGestureDetector = PanGestureDetector()
+
     private var _touchPoint_down = PointF(0.0f, 0.0f)
     /** difference between where the the touch began and where _imageView position (center) */
     private var _touchPoint_offset = PointF()
+
+    private var _imageView_pos_initial = PointF()
 
     /** the angle of the _imageView when thr rotation starts */
     private var _startAngle_imageView = 0.0f
@@ -202,6 +221,7 @@ class ImageInspectorView : FrameLayout, ScaleGestureDetector.OnScaleGestureListe
         _imageView.setBackgroundColor(Color.RED)
         _imageView.setBitmap(uri = null)
 
+        _panGestureDetector.delegate = this
         _rotationGestureDetector.delegate = this
     }
 

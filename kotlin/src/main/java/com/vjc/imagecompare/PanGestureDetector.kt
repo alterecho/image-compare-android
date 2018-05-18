@@ -35,13 +35,13 @@ class PanGestureDetector {
                 }
 
                 MotionEvent.ACTION_POINTER_DOWN -> {
-                    return false
+//                    return false
                 }
 
                 MotionEvent.ACTION_MOVE -> {
-                    _vec = Vec2(_pnt_begin.x - _loc.x, _loc.y - _pnt_begin.y)
+                    _vec = Vec2(_loc.x - _pnt_begin.x, _loc.y - _pnt_begin.y)
                     _delegateRef?.get()?.panMove(this)
-                    return true
+//                    return true
                 }
 
                 MotionEvent.ACTION_UP -> {
